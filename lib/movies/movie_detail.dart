@@ -1,14 +1,13 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:movies/movies/Result.dart';
-import 'package:movies/movies/movies.dart';
+import 'package:movies/data/model/Result.dart';
 
 class MovieDetail extends StatelessWidget {
   final String imageUrl = 'https://image.tmdb.org/t/p/w500/';
-  final Results movie;
+  final Results movieResult;
 
-  MovieDetail(this.movie);
+  MovieDetail({this.movieResult});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class MovieDetail extends StatelessWidget {
           body: Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              Image.network(imageUrl + movie.posterPath,
+              Image.network(imageUrl + movieResult.posterPath,
                   fit: BoxFit.cover),
               new BackdropFilter(
                 filter: new ui.ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
@@ -33,22 +32,23 @@ class MovieDetail extends StatelessWidget {
                 child: new Column(
                   children: <Widget>[
                     Container(
-                      child: new Container(width: double.infinity, height: 400.0,
+                      child: new Container(
+                        width: double.infinity, height: 450.0,
                       decoration: new BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           image: new DecorationImage(
                               image: NetworkImage(
-                                  imageUrl + movie.posterPath),
+                                  imageUrl + movieResult.posterPath),
                               fit: BoxFit.cover)),),
                     ),
                     new Expanded(
-                      child: Text(movie.title, style: TextStyle(
+                      child: Text(movieResult.title, style: TextStyle(
                           color: Colors.white,
                           fontSize: 30.0,
                           fontFamily: 'Arvo')),
                     ),
                     new Expanded(
-                      child: Text(movie.overview, style: TextStyle(
+                      child: Text(movieResult.overview, style: TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,
                           fontFamily: 'Arvo')),
@@ -56,7 +56,6 @@ class MovieDetail extends StatelessWidget {
                   ],
                 ),
               ),
-
             ],
           ),
         ),

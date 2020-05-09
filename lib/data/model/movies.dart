@@ -1,4 +1,4 @@
-import 'package:movies/movies/Result.dart';
+import 'package:movies/data/model/Result.dart';
 
 class Movies {
   int _page;

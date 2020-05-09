@@ -3,10 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:movies/movies/Result.dart';
-import 'package:movies/movies/movies.dart';
-
-import './movie_Detail.dart';
+import 'package:movies/data/model/movies.dart';
 
 // create a function that fetches our list of movies from the
 // MovieDb Api
@@ -55,7 +52,7 @@ class MovieGridState extends State<MovieGrid> {
                 if (asyncSnapshot.connectionState == ConnectionState.waiting) {
                   return _circularIndicator();
                 } else if (asyncSnapshot.hasData) {
-                  return _Movies(asyncSnapshot.data);
+                  return Center();
                 } else {
                   print('async ${asyncSnapshot.data}');
                   return Center(child: Text('Couldnt fetch Movies',style:
@@ -66,45 +63,45 @@ class MovieGridState extends State<MovieGrid> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget _Movies(Movies movies) {
-    final String imageUrl = 'https://image.tmdb.org/t/p/w500/';
-    return GridView.builder(
-      gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      itemCount: movies != null ? movies.results.length : 0,
-      itemBuilder: (BuildContext context, int index) {
-        Results movieResult = movies.results[index];
-        return InkWell(
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MovieDetail(movieResult))),
-          child: Card(
-            margin: EdgeInsets.all(3),
-            child: Hero(
-                tag: movieResult.title,
-                child: Material(
-                  child: GridTile(
-                      footer: Container(
-                        width: 400,
-                        height: 400,
-                        color: Colors.black26,
-                        child: ListTile(
-                          leading: Text(movieResult.title,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 16.0)),
-                        ),
-                      ),
-                      child: Image.network(imageUrl + movieResult.posterPath,
-                          fit: BoxFit.cover)),
-                )),
-          ),
-        );
-      },
-    );
-  }
+//  Widget _Movies(Movies movies) {
+//    final String imageUrl = 'https://image.tmdb.org/t/p/w500/';
+//    return GridView.builder(
+//      gridDelegate:
+//          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+//      itemCount: movies != null ? movies.results.length : 0,
+//      itemBuilder: (BuildContext context, int index) {
+//        Results movieResult = movies.results[index];
+//        return InkWell(
+//          onTap: () => Navigator.push(
+//              context,
+//              MaterialPageRoute(
+//                  builder: (context) => MovieDetail(movies.results[0]))),
+//          child: Card(
+//            margin: EdgeInsets.all(3),
+//            child: Hero(
+//                tag: movieResult.title,
+//                child: Material(
+//                  child: GridTile(
+//                      footer: Container(
+//                        width: 400,
+//                        height: 400,
+//                        color: Colors.black26,
+//                        child: ListTile(
+//                          leading: Text(movieResult.title,
+//                              style: TextStyle(
+//                                  fontWeight: FontWeight.bold,
+//                                  color: Colors.white,
+//                                  fontSize: 16.0)),
+//                        ),
+//                      ),
+//                      child: Image.network(imageUrl + movieResult.posterPath,
+//                          fit: BoxFit.cover)),
+//                )),
+//          ),
+//        );
+//      },
+//    );
+//  }
 
   Widget _circularIndicator() {
     return Center(
