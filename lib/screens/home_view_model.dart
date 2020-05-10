@@ -9,7 +9,9 @@ class HomeViewModel extends ChangeNotifier {
   NowPlayingResponse nowPlayingResponse;
   Movies movieResponse;
   PopularMovie popularMovieResponse;
-  String messageToShow = "";
+  String nowPlayingNetworkExceptionMessage = "";
+  String popularMoviesNetworkExceptionMessage = "";
+  String movieCategoryNetworkExceptionMessage = "";
   final _appRepository = AppRepository();
 
   bool _isNowPlayingLoading = false;
@@ -44,7 +46,7 @@ class HomeViewModel extends ChangeNotifier {
       //print("viewModel movieResponse is ${movieResponse.toString()}");
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
-      messageToShow = networkingResponse.message;
+      movieCategoryNetworkExceptionMessage = networkingResponse.message;
     }
 
     /// Stop the loader
@@ -67,7 +69,7 @@ class HomeViewModel extends ChangeNotifier {
       nowPlayingResponse = networkingResponse.dataResponse;
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
-      messageToShow = networkingResponse.message;
+      nowPlayingNetworkExceptionMessage = networkingResponse.message;
     }
 
     /// Stop the loader
@@ -91,7 +93,7 @@ class HomeViewModel extends ChangeNotifier {
       print("popular movies is $popularMovieResponse");
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
-      messageToShow = networkingResponse.message;
+      popularMoviesNetworkExceptionMessage = networkingResponse.message;
     }
 
     /// Stop the loader

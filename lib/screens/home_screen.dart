@@ -18,8 +18,7 @@ class HomeScreen extends StatelessWidget {
                 body: ListView(
                   children: <Widget>[
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       height: MediaQuery.of(context).size.height * 0.20,
                       width: double.infinity,
                       child: Column(
@@ -28,17 +27,13 @@ class HomeScreen extends StatelessWidget {
                           Align(
                             alignment: Alignment.topRight,
                             child: CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/daniel-craig.jpg"),
+                              backgroundImage: AssetImage("assets/images/daniel-craig.jpg"),
                               radius: 25.0,
                             ),
                           ),
                           Text(
                             'Hey, James Bond!',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w600),
+                            style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(height: 10),
@@ -46,23 +41,16 @@ class HomeScreen extends StatelessWidget {
                               child: Padding(
                             padding: EdgeInsets.only(right: 40.0),
                             child: Text('What would you like to watch today ?',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 26.0,
-                                    fontWeight: FontWeight.bold)),
+                                style: TextStyle(color: Colors.white, fontSize: 26.0, fontWeight: FontWeight.bold)),
                           ))
                         ],
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 30.0),
+                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
                       height: MediaQuery.of(context).size.height * 0.80,
                       width: double.infinity,
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.only(topLeft: Radius.circular(40.0)),
-                          color: Colors.white),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(40.0)), color: Colors.white),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -75,12 +63,9 @@ class HomeScreen extends StatelessWidget {
                                   height: 130,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: viewModel.movieResponse != null
-                                        ? viewModel.movieResponse.results.length
-                                        : 0,
+                                    itemCount: viewModel.movieResponse != null ? viewModel.movieResponse.results.length : 0,
                                     itemBuilder: (context, int index) {
-                                      Results result = viewModel
-                                          .movieResponse.results[index];
+                                      Results result = viewModel.movieResponse.results[index];
                                       return MovieCategory(movieResult: result);
                                     },
                                   ),
@@ -89,14 +74,8 @@ class HomeScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text('Now Playing',
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w600)),
-                              Text('View more',
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w400)),
+                              Text('Now Playing', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600)),
+                              Text('View more', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400)),
                             ],
                           ),
                           SizedBox(height: 8.0),
@@ -106,17 +85,10 @@ class HomeScreen extends StatelessWidget {
                                   height: 170,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        viewModel.nowPlayingResponse != null
-                                            ? viewModel.nowPlayingResponse
-                                                .results.length
-                                            : 0,
+                                    itemCount: viewModel.nowPlayingResponse != null ? viewModel.nowPlayingResponse.results.length : 0,
                                     itemBuilder: (context, int index) {
-                                      Results nowPlayingMovieResult = viewModel
-                                          .nowPlayingResponse.results[index];
-                                      return NowPlaying(
-                                          nowPlayingResult:
-                                              nowPlayingMovieResult);
+                                      Results nowPlayingMovieResult = viewModel.nowPlayingResponse.results[index];
+                                      return NowPlaying(nowPlayingResult: nowPlayingMovieResult);
                                     },
                                   ),
                                 ),
@@ -124,14 +96,8 @@ class HomeScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text('Popular Movies',
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold)),
-                              Text('View more',
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w400)),
+                              Text('Popular Movies', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                              Text('View more', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400)),
                             ],
                           ),
                           SizedBox(height: 10.0),
@@ -143,17 +109,10 @@ class HomeScreen extends StatelessWidget {
                                     height: 130,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          viewModel.popularMovieResponse != null
-                                              ? viewModel.popularMovieResponse
-                                                  .results.length
-                                              : 0,
+                                      itemCount: viewModel.popularMovieResponse != null ? viewModel.popularMovieResponse.results.length : 0,
                                       itemBuilder: (context, int index) {
-                                        Results result = viewModel
-                                            .popularMovieResponse
-                                            .results[index];
-                                        return PopularMovies(
-                                            popularMovies: result);
+                                        Results result = viewModel.popularMovieResponse.results[index];
+                                        return PopularMovies(popularMovies: result);
                                       },
                                     ),
                                   ),

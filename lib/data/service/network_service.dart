@@ -26,11 +26,11 @@ class NetworkService {
         //print(movieResponse.results);
         return NetworkingResponseData<Movies>(movieResponse);
       } else {
-        print("inside null");
-        return null;
+        return NetworkingException(
+            "Failed to fetch your movie Categories ${response.statusCode}");
       }
     } catch (e) {
-      print(e);
+      print(e.toString());
       return NetworkingException(e.toString());
     }
   }
@@ -50,7 +50,8 @@ class NetworkService {
         //print(nowPlaying.results);
         return NetworkingResponseData<NowPlayingResponse>(nowPlaying);
       } else {
-        return null;
+        return NetworkingException(
+            "Failed to fetch your now showing categories ${response.statusCode}");
       }
     } catch (e) {
       return NetworkingException(e.toString());
@@ -72,7 +73,8 @@ class NetworkService {
         print(popularMovies.results);
         return NetworkingResponseData<PopularMovie>(popularMovies);
       } else {
-        return null;
+        return NetworkingException(
+            "Failed to fetch your now showing categories ${response.statusCode}");
       }
     } catch (e) {
       return NetworkingException(e.toString());
