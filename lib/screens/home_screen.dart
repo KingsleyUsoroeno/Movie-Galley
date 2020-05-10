@@ -30,9 +30,9 @@ class HomeScreen extends StatelessWidget {
       // error state
       return Center(
           child: Text(
-            viewModel.movieCategoryNetworkExceptionMessage,
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-          ));
+        viewModel.movieCategoryNetworkExceptionMessage,
+        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+      ));
     }
   }
 
@@ -55,9 +55,9 @@ class HomeScreen extends StatelessWidget {
       // error state
       return Center(
           child: Text(
-            viewModel.nowPlayingNetworkExceptionMessage,
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-          ));
+        viewModel.nowPlayingNetworkExceptionMessage,
+        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+      ));
     }
   }
 
@@ -80,9 +80,9 @@ class HomeScreen extends StatelessWidget {
       // error state
       return Center(
           child: Text(
-            viewModel.popularMoviesNetworkExceptionMessage,
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-          ));
+        viewModel.popularMoviesNetworkExceptionMessage,
+        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+      ));
     }
   }
 
@@ -96,9 +96,7 @@ class HomeScreen extends StatelessWidget {
         builder: (context, viewModel, child) {
           return SafeArea(
             child: Scaffold(
-              backgroundColor: Theme
-                  .of(context)
-                  .primaryColor,
+              backgroundColor: Theme.of(context).primaryColor,
               body: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -150,13 +148,11 @@ class HomeScreen extends StatelessWidget {
                               Text('Now Playing', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600)),
                               GestureDetector(
                                 child: Text('View more', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                onTap: () =>
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (_) =>
-                                            MovieGrid(
-                                              movieResults: viewModel.nowPlayingResponse.results,
-                                              tag: "Now Playing",
-                                            ))),
+                                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => MovieGrid(
+                                          movieResults: viewModel.nowPlayingResponse.results,
+                                          tag: "Now Playing",
+                                        ))),
                               ),
                             ],
                           ),

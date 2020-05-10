@@ -19,9 +19,7 @@ class MovieGrid extends StatelessWidget {
             tag,
             style: TextStyle(fontSize: 18.0, color: Colors.white),
           ),
-          backgroundColor: Theme
-              .of(context)
-              .primaryColor,
+          backgroundColor: Theme.of(context).primaryColor,
           centerTitle: true,
         ),
         body: _buildMovies(movieResults),
