@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/data/model/Result.dart';
-import 'package:movies/movies/movie_detail.dart';
+import 'package:movies/screens/movies/movie_detail.dart';
 
 class MovieCategory extends StatelessWidget {
   final Results movieResult;
@@ -23,15 +23,12 @@ class MovieCategory extends StatelessWidget {
             width: 200,
             margin: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(imageUrl + movieResult.posterPath),
-                    fit: BoxFit.cover),
+                image: DecorationImage(image: NetworkImage(imageUrl + movieResult.posterPath), fit: BoxFit.cover),
                 borderRadius: BorderRadius.circular(20.0)),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
               decoration: BoxDecoration(
-                  gradient:
-                      LinearGradient(begin: Alignment.bottomRight, colors: [
+                  gradient: LinearGradient(begin: Alignment.bottomRight, colors: [
                     Colors.black.withOpacity(.8),
                     Colors.black.withOpacity(.2),
                   ]),

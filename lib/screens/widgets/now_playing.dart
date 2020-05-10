@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/data/model/Result.dart';
-import 'package:movies/movies/movie_detail.dart';
+import 'package:movies/screens/movies/movie_detail.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class NowPlaying extends StatelessWidget {
@@ -13,8 +13,7 @@ class NowPlaying extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => MovieDetail(movieResult: nowPlayingResult))),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => MovieDetail(movieResult: nowPlayingResult))),
       child: Container(
         margin: EdgeInsets.all(6.0),
         width: 90,
@@ -26,10 +25,7 @@ class NowPlaying extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
                   child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: imageUrl + nowPlayingResult.posterPath,
-                      fit: BoxFit.cover,
-                      width: 90),
+                      placeholder: kTransparentImage, image: imageUrl + nowPlayingResult.posterPath, fit: BoxFit.cover, width: 90),
                 )),
             SizedBox(height: 10.0),
             Expanded(
@@ -46,9 +42,7 @@ class NowPlaying extends StatelessWidget {
                 children: <Widget>[
                   Icon(Icons.star, color: Colors.yellow[800], size: 16.0),
                   SizedBox(width: 6.0),
-                  Text('8.2/10',
-                      style: TextStyle(
-                          fontSize: 10.0, fontWeight: FontWeight.w300)),
+                  Text('8.2/10', style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.w300)),
                 ],
               ),
             )

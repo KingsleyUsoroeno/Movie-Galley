@@ -9,14 +9,28 @@ class HomeViewModel extends ChangeNotifier {
   NowPlayingResponse nowPlayingResponse;
   Movies movieResponse;
   PopularMovie popularMovieResponse;
+
+  // DIFFERENT ERROR MESSAGES FOR THE VARIOUS LIST VIEWS ON THE UI
   String nowPlayingNetworkExceptionMessage = "";
   String popularMoviesNetworkExceptionMessage = "";
   String movieCategoryNetworkExceptionMessage = "";
   final _appRepository = AppRepository();
 
+  // LOADING STATE OF THE DIFFERENT LIST VIEWS
   bool _isNowPlayingLoading = false;
   bool _isMovieResponseLoading = false;
   bool _isPopularMovieResponseLoading = false;
+
+  // SUCCESS STATE OF THE DATA BEING FETCHED FROM THE NETWORK
+  bool _didFetchMovieCategory = false;
+  bool _didFetchPopularMovies = false;
+  bool _didFetchNowPlaying = false;
+
+  bool get didFetchMovieCategory => _didFetchMovieCategory;
+
+  bool get didFetchPopularMovies => _didFetchPopularMovies;
+
+  bool get didFetchNowPlaying => _didFetchNowPlaying;
 
   bool get isPopularMovieResponseLoading => _isPopularMovieResponseLoading;
 
@@ -36,17 +50,20 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
 
     /// Wait for response
-    NetworkResponse networkingResponse =
-        await _appRepository.getMovieCategory();
+    NetworkResponse networkingResponse = await _appRepository.getMovieCategory();
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
       /// Updating the APIResponseModel when success
       movieResponse = networkingResponse.dataResponse;
+      _didFetchMovieCategory = true;
+      notifyListeners();
       //print("viewModel movieResponse is ${movieResponse.toString()}");
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
       movieCategoryNetworkExceptionMessage = networkingResponse.message;
+      _didFetchMovieCategory = false;
+      notifyListeners();
     }
 
     /// Stop the loader
@@ -60,16 +77,19 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
 
     /// Wait for response
-    NetworkResponse networkingResponse =
-        await _appRepository.getNowPlayingMovies();
+    NetworkResponse networkingResponse = await _appRepository.getNowPlayingMovies();
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
       /// Updating the APIResponseModel when success
       nowPlayingResponse = networkingResponse.dataResponse;
+      _didFetchNowPlaying = true;
+      notifyListeners();
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
       nowPlayingNetworkExceptionMessage = networkingResponse.message;
+      _didFetchNowPlaying = false;
+      notifyListeners();
     }
 
     /// Stop the loader
@@ -83,17 +103,20 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
 
     /// Wait for response
-    NetworkResponse networkingResponse =
-        await _appRepository.getPopularMovies();
+    NetworkResponse networkingResponse = await _appRepository.getPopularMovies();
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
       /// Updating the APIResponseModel when success
       popularMovieResponse = networkingResponse.dataResponse;
+      _didFetchPopularMovies = true;
+      notifyListeners();
       print("popular movies is $popularMovieResponse");
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
       popularMoviesNetworkExceptionMessage = networkingResponse.message;
+      _didFetchPopularMovies = false;
+      notifyListeners();
     }
 
     /// Stop the loader
