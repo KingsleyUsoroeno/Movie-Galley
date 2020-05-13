@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movies/screens/home_view_model.dart';
 import 'package:movies/screens/movies/movie_grid.dart';
+import 'package:movies/screens/viewmodel/home_view_model.dart';
 import 'package:stacked/stacked.dart';
 
 import '../data/model/Result.dart';
-import 'home_view_model.dart';
+import 'viewmodel/home_view_model.dart';
 import 'widgets/custom_search_view.dart';
 import 'widgets/movie_category.dart';
 import 'widgets/now_playing.dart';
@@ -28,11 +28,7 @@ class HomeScreen extends StatelessWidget {
       );
     } else {
       // error state
-      return Center(
-          child: Text(
-        viewModel.movieCategoryNetworkExceptionMessage,
-        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-      ));
+      return _showErrorText(viewModel.movieCategoryNetworkExceptionMessage);
     }
   }
 
@@ -53,12 +49,14 @@ class HomeScreen extends StatelessWidget {
       );
     } else {
       // error state
-      return Center(
-          child: Text(
-        viewModel.nowPlayingNetworkExceptionMessage,
-        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-      ));
+      return _showErrorText(viewModel.nowPlayingNetworkExceptionMessage);
     }
+  }
+
+  Widget _showErrorText(String errorMessage) {
+    return Center(
+      child: Text(errorMessage, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+    );
   }
 
   Widget _buildPopularMovies(HomeViewModel viewModel) {
@@ -78,11 +76,7 @@ class HomeScreen extends StatelessWidget {
       );
     } else {
       // error state
-      return Center(
-          child: Text(
-        viewModel.popularMoviesNetworkExceptionMessage,
-        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-      ));
+      return _showErrorText(viewModel.popularMoviesNetworkExceptionMessage);
     }
   }
 
@@ -103,7 +97,10 @@ class HomeScreen extends StatelessWidget {
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.25,
                       width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

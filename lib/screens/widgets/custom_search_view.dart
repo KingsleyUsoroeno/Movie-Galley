@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SearchView extends StatelessWidget {
   @override
@@ -13,6 +14,7 @@ class SearchView extends StatelessWidget {
       ),
       child: TextFormField(
         maxLines: 1,
+        inputFormatters: [LengthLimitingTextInputFormatter(30)],
         decoration: InputDecoration(
             hintText: 'Search movies/tv series',
             border: InputBorder.none,

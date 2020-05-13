@@ -9,12 +9,7 @@ class NowPlayingResponse {
   Dates dates;
   int totalPages;
 
-  NowPlayingResponse(
-      {this.results,
-      this.page,
-      this.totalResults,
-      this.dates,
-      this.totalPages});
+  NowPlayingResponse({this.results, this.page, this.totalResults, this.dates, this.totalPages});
 
   NowPlayingResponse.fromJson(Map<String, dynamic> json) {
     if (json['results'] != null) {
@@ -45,6 +40,6 @@ class NowPlayingResponse {
 
   @override
   String toString() {
-    return 'NowPlaying{results: $results, page: $page, totalResults: $totalResults, dates: $dates, totalPages: $totalPages}';
+    return 'NowPlaying{page $page: results: $totalResults, dates: $dates, totalPages: $totalPages, results: $results}';
   }
 }

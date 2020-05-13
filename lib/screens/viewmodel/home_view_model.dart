@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:movies/data/model/Result.dart';
 import 'package:movies/data/model/movies.dart';
 import 'package:movies/data/model/network_response.dart';
 import 'package:movies/data/model/now_playing.dart';
@@ -71,13 +72,13 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getNowPlaying() async {
+  void getNowPlaying({bool loadMore = false, List<Results> results}) async {
     /// Start showing the loader
     _isNowPlayingLoading = true;
     notifyListeners();
 
     /// Wait for response
-    NetworkResponse networkingResponse = await _appRepository.getNowPlayingMovies();
+    NetworkResponse networkingResponse = await _appRepository.getNowPlayingMovies(loadMore: loadMore);
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {

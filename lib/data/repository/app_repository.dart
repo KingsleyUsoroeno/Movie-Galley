@@ -13,8 +13,8 @@ class AppRepository {
     return networkService.getMovieCategories();
   }
 
-  Future<NetworkResponse> getNowPlayingMovies() {
-    return networkService.getNowPlaying();
+  Future<NetworkResponse> getNowPlayingMovies({bool loadMore = false}) {
+    return networkService.getNowPlaying(loadMore: loadMore);
   }
 
   Future<NetworkResponse> getPopularMovies() {
