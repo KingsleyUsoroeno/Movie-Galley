@@ -13,7 +13,8 @@ import '../model/network_response.dart';
 class NetworkService {
   final String _apiKey = "98d4ab8983c3a5727df9ab4f565f5f4a";
   final String _baseUrl = "http://api.themoviedb.org/";
-  int perPage = 1;
+  int _perNowPlayingPage = 1;
+  int _perPopularMoviePage = 1;
 
   Future<NetworkResponse> getMovieCategories() async {
     print("getMovieCategories() Called");
@@ -42,13 +43,13 @@ class NetworkService {
   Future<NetworkResponse> getNowPlaying({bool loadMore = false}) async {
     // https://api.themoviedb.org/3/movie/now_playing?api_key=98d4ab8983c3a5727df9ab4f565f5f4a&language=en-US&page=1
     if (loadMore == true) {
-      perPage += 1;
-      print("perPage value is $perPage");
+      _perNowPlayingPage += 1;
+      print("perPage value is $_perNowPlayingPage");
     }
 
-    print("loading per page is $perPage");
+    print("loading per page is $_perNowPlayingPage");
     try {
-      final String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=$_apiKey&language=en-US&page=$perPage";
+      final String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=$_apiKey&language=en-US&page=$_perNowPlayingPage";
 
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -68,10 +69,15 @@ class NetworkService {
     }
   }
 
-  Future<NetworkResponse> getPopularMovies() async {
+  Future<NetworkResponse> getPopularMovies({bool loadMore = false}) async {
     //https://api.themoviedb.org/3/movie/popular?api_key=98d4ab8983c3a5727df9ab4f565f5f4a&language=en-US&page=1
+    if (loadMore == true) {
+      _perPopularMoviePage += 1;
+      print("perPage value is $_perPopularMoviePage");
+    }
+
     try {
-      final String url = "https://api.themoviedb.org/3/movie/popular?api_key=$_apiKey";
+      final String url = "https://api.themoviedb.org/3/movie/popular?api_key=$_apiKey&language=en-US&page=$_perPopularMoviePage";
 
       final response = await http.get(url);
       if (response.statusCode == 200) {

@@ -17,7 +17,7 @@ class AppRepository {
     return networkService.getNowPlaying(loadMore: loadMore);
   }
 
-  Future<NetworkResponse> getPopularMovies() {
-    return networkService.getPopularMovies();
+  Future<NetworkResponse> getPopularMovies({bool loadMore = false}) {
+    return networkService.getPopularMovies(loadMore: loadMore);
   }
 }

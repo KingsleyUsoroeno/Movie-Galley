@@ -97,10 +97,7 @@ class HomeScreen extends StatelessWidget {
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.25,
+                      height: MediaQuery.of(context).size.height * 0.25,
                       width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +157,12 @@ class HomeScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text('Popular Movies', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-                              Text('View more', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              GestureDetector(
+                                child: Text('View more', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400)),
+                                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => MovieGrid(movieResults: viewModel.popularMovieResponse.results, tag: "Popular Movies"),
+                                )),
+                              ),
                             ],
                           ),
                           SizedBox(height: 10.0),
