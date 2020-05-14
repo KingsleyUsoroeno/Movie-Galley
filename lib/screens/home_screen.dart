@@ -143,11 +143,10 @@ class HomeScreen extends StatelessWidget {
                               GestureDetector(
                                 child: Text('View more', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400)),
                                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) =>
-                                      MovieGrid(
-                                        movieResults: viewModel.nowPlayingResponse.results,
-                                        tag: "Now Playing",
-                                      ),
+                                  builder: (_) => MovieGrid(
+                                    movieResults: viewModel.nowPlayingResponse.results,
+                                    tag: "Now Playing",
+                                  ),
                                 )),
                               ),
                             ],
