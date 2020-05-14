@@ -16,6 +16,7 @@ class LoadMoreViewModel extends ChangeNotifier {
   bool get didFetchNowPlaying => _didFetchNowPlaying;
 
   bool get didFetchPopularMovies => _didFetchPopularMovies;
+
   String nowPlayingNetworkExceptionMessage = "";
   String popularMoviesExceptionMessage = "";
 
@@ -33,7 +34,6 @@ class LoadMoreViewModel extends ChangeNotifier {
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
-      /// Updating the APIResponseModel when success
       _nowPlayingResponse = networkingResponse.dataResponse;
       results.addAll(_nowPlayingResponse.results);
       _didFetchNowPlaying = true;
@@ -60,7 +60,6 @@ class LoadMoreViewModel extends ChangeNotifier {
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
-      /// Updating the APIResponseModel when success
       _popularMovies = networkingResponse.dataResponse;
       results.addAll(_popularMovies.results);
       _didFetchPopularMovies = true;

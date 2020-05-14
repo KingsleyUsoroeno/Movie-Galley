@@ -12,7 +12,7 @@ import '../model/network_response.dart';
 // Todo try and build a function that encapsulates the try/Catch stuff
 class NetworkService {
   final String _apiKey = "98d4ab8983c3a5727df9ab4f565f5f4a";
-  final String _baseUrl = "http://api.themoviedb.org/";
+  final String _baseUrl = "https://api.themoviedb.org/";
   int _perNowPlayingPage = 1;
   int _perPopularMoviePage = 1;
 

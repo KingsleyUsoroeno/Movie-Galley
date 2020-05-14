@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:movies/data/model/Result.dart';
 import 'package:movies/data/model/movies.dart';
 import 'package:movies/data/model/network_response.dart';
 import 'package:movies/data/model/now_playing.dart';
@@ -27,6 +26,7 @@ class HomeViewModel extends ChangeNotifier {
   bool _didFetchPopularMovies = false;
   bool _didFetchNowPlaying = false;
 
+  // GETTERS
   bool get didFetchMovieCategory => _didFetchMovieCategory;
 
   bool get didFetchPopularMovies => _didFetchPopularMovies;
@@ -55,11 +55,9 @@ class HomeViewModel extends ChangeNotifier {
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
-      /// Updating the APIResponseModel when success
       movieResponse = networkingResponse.dataResponse;
       _didFetchMovieCategory = true;
       notifyListeners();
-      //print("viewModel movieResponse is ${movieResponse.toString()}");
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
       movieCategoryNetworkExceptionMessage = networkingResponse.message;
@@ -72,17 +70,16 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getNowPlaying({bool loadMore = false, List<Results> results}) async {
+  void getNowPlaying() async {
     /// Start showing the loader
     _isNowPlayingLoading = true;
     notifyListeners();
 
     /// Wait for response
-    NetworkResponse networkingResponse = await _appRepository.getNowPlayingMovies(loadMore: loadMore);
+    NetworkResponse networkingResponse = await _appRepository.getNowPlayingMovies();
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
-      /// Updating the APIResponseModel when success
       nowPlayingResponse = networkingResponse.dataResponse;
       _didFetchNowPlaying = true;
       notifyListeners();
@@ -108,7 +105,6 @@ class HomeViewModel extends ChangeNotifier {
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
-      /// Updating the APIResponseModel when success
       popularMovieResponse = networkingResponse.dataResponse;
       _didFetchPopularMovies = true;
       notifyListeners();

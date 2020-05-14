@@ -35,7 +35,7 @@ class _MovieGridState extends State<MovieGrid> {
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    width: 400,
+                    width: double.infinity,
                     child: NotificationListener<ScrollNotification>(
                       onNotification: (notification) => _onScrollNotification(viewModel, notification),
                       child: GridView.builder(
