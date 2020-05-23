@@ -26,6 +26,8 @@ dependencies:
   http: '^0.11.3+16'
   stacked: ^1.2.2
   transparent_image: ^1.0.0
+  sqflite:
+  path_provider:
 
 dev_dependencies:
   flutter_test:

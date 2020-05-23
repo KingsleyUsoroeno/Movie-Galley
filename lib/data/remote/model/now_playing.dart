@@ -1,13 +1,14 @@
-import 'package:movies/data/model/date.dart';
+import 'package:movies/data/model/database/model/now_playing_model.dart';
+import 'package:movies/data/remote/model/date.dart';
 
 import 'Result.dart';
 
 class NowPlayingResponse {
-  List<Results> results;
   int page;
   int totalResults;
-  Dates dates;
   int totalPages;
+  Dates dates;
+  List<Results> results;
 
   NowPlayingResponse({this.results, this.page, this.totalResults, this.dates, this.totalPages});
 
@@ -37,6 +38,9 @@ class NowPlayingResponse {
     data['total_pages'] = this.totalPages;
     return data;
   }
+
+  NowPlayingDatabaseModel toDatabaseModel() =>
+      NowPlayingDatabaseModel(totalResults: totalResults, totalPages: totalPages, dates: dates, results: results);
 
   @override
   String toString() {

@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:movies/data/model/Result.dart';
-import 'package:movies/data/model/network_response.dart';
-import 'package:movies/data/model/now_playing.dart';
-import 'package:movies/data/model/popular_movie.dart';
+import 'package:movies/data/remote/model/Result.dart';
+import 'package:movies/data/remote/model/now_playing.dart';
+import 'package:movies/data/remote/model/popular_movie.dart';
+import 'package:movies/data/remote/wrapper/network_response.dart';
 import 'package:movies/data/repository/app_repository.dart';
 
 class LoadMoreViewModel extends ChangeNotifier {

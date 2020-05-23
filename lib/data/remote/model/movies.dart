@@ -1,4 +1,5 @@
-import 'package:movies/data/model/Result.dart';
+import 'package:movies/data/model/database/model/movie_model.dart';
+import 'package:movies/data/remote/model/Result.dart';
 
 class Movies {
   int _page;
@@ -40,6 +41,9 @@ class Movies {
       });
     }
   }
+
+  MovieDatabaseModel toDatabaseModel() =>
+      MovieDatabaseModel(page: page, totalResults: totalResults, totalPages: totalPages, results: results);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

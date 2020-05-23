@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/screens/viewmodel/load_more_view_model.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../data/model/Result.dart';
+import '../../data/remote/model/Result.dart';
 
 class MovieGrid extends StatefulWidget {
   final List<Results> movieResults;

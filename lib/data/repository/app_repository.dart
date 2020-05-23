@@ -1,4 +1,4 @@
-import 'package:movies/data/model/network_response.dart';
+import 'package:movies/data/remote/wrapper/network_response.dart';
 import 'package:movies/data/service/network_service.dart';
 
 class AppRepository {

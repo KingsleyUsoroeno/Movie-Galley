@@ -1,3 +1,5 @@
+import 'package:movies/data/model/database/model/popular_movie_model.dart';
+
 import 'Result.dart';
 
 class PopularMovie {
@@ -30,6 +32,9 @@ class PopularMovie {
     }
     return data;
   }
+
+  PopularMoviesDatabaseModel toDatabaseModel() =>
+      PopularMoviesDatabaseModel(page: page, totalResults: totalResults, totalPages: totalPages, results: results);
 
   @override
   String toString() {

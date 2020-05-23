@@ -2,12 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:movies/data/model/movies.dart';
-import 'package:movies/data/model/network_response.dart';
-import 'package:movies/data/model/now_playing.dart';
-import 'package:movies/data/model/popular_movie.dart';
-
-import '../model/network_response.dart';
+import 'package:movies/data/remote/model/movies.dart';
+import 'package:movies/data/remote/model/now_playing.dart';
+import 'package:movies/data/remote/model/popular_movie.dart';
+import 'package:movies/data/remote/wrapper/network_response.dart';
 
 // Todo try and build a function that encapsulates the try/Catch stuff
 class NetworkService {

@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:movies/data/model/Result.dart';
+import 'package:movies/data/remote/model/Result.dart';
 
 class MovieDetail extends StatelessWidget {
   final String imageUrl = 'https://image.tmdb.org/t/p/w500/';

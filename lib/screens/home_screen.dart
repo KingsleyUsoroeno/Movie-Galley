@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:movies/screens/movies/movie_grid.dart';
 import 'package:movies/screens/viewmodel/home_view_model.dart';
 import 'package:stacked/stacked.dart';
 
-import '../data/model/Result.dart';
+import '../data/remote/model/Result.dart';
+import 'movies/movie_grid.dart';
 import 'viewmodel/home_view_model.dart';
 import 'widgets/custom_search_view.dart';
 import 'widgets/movie_category.dart';
@@ -20,9 +20,9 @@ class HomeScreen extends StatelessWidget {
       // success state
       return ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: viewModel.movieResponse != null ? viewModel.movieResponse.results.length : 0,
+        itemCount: viewModel.allMovies != null ? viewModel.allMovies.results.length : 0,
         itemBuilder: (context, int index) {
-          Results result = viewModel.movieResponse.results[index];
+          Results result = viewModel.allMovies.results[index];
           return MovieCategory(movieResult: result);
         },
       );
@@ -41,9 +41,9 @@ class HomeScreen extends StatelessWidget {
       // success state
       return ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: viewModel.nowPlayingResponse != null ? viewModel.nowPlayingResponse.results.length : 0,
+        itemCount: viewModel.allNowPlayingMovies != null ? viewModel.allNowPlayingMovies.results.length : 0,
         itemBuilder: (context, int index) {
-          Results nowPlayingMovieResult = viewModel.nowPlayingResponse.results[index];
+          Results nowPlayingMovieResult = viewModel.allNowPlayingMovies.results[index];
           return NowPlaying(nowPlayingResult: nowPlayingMovieResult);
         },
       );
@@ -68,9 +68,9 @@ class HomeScreen extends StatelessWidget {
       // success state
       return ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: viewModel.popularMovieResponse != null ? viewModel.popularMovieResponse.results.length : 0,
+        itemCount: viewModel.allPopularMovies != null ? viewModel.allPopularMovies.results.length : 0,
         itemBuilder: (context, int index) {
-          Results result = viewModel.popularMovieResponse.results[index];
+          Results result = viewModel.allPopularMovies.results[index];
           return PopularMovies(popularMovies: result);
         },
       );
@@ -142,12 +142,7 @@ class HomeScreen extends StatelessWidget {
                               Text('Now Playing', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600)),
                               GestureDetector(
                                 child: Text('View more', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => MovieGrid(
-                                    movieResults: viewModel.nowPlayingResponse.results,
-                                    tag: "Now Playing",
-                                  ),
-                                )),
+                                onTap: () => {},
                               ),
                             ],
                           ),
@@ -161,7 +156,7 @@ class HomeScreen extends StatelessWidget {
                               GestureDetector(
                                 child: Text('View more', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400)),
                                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => MovieGrid(movieResults: viewModel.popularMovieResponse.results, tag: "Popular Movies"),
+                                  builder: (_) => MovieGrid(movieResults: viewModel.allPopularMovies.results, tag: "Popular Movies"),
                                 )),
                               ),
                             ],

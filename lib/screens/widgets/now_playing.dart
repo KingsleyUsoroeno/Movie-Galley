@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies/data/model/Result.dart';
+import 'package:movies/data/remote/model/Result.dart';
 import 'package:movies/screens/movies/movie_detail.dart';
 import 'package:transparent_image/transparent_image.dart';
 

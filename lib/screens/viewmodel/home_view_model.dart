@@ -1,14 +1,19 @@
 import 'package:flutter/foundation.dart';
-import 'package:movies/data/model/movies.dart';
-import 'package:movies/data/model/network_response.dart';
-import 'package:movies/data/model/now_playing.dart';
-import 'package:movies/data/model/popular_movie.dart';
+import 'package:movies/data/model/database/db/db_helper.dart';
+import 'package:movies/data/model/database/model/movie_model.dart';
+import 'package:movies/data/model/database/model/now_playing_model.dart';
+import 'package:movies/data/model/database/model/popular_movie_model.dart';
+import 'package:movies/data/remote/model/movies.dart';
+import 'package:movies/data/remote/model/now_playing.dart';
+import 'package:movies/data/remote/model/popular_movie.dart';
+import 'package:movies/data/remote/wrapper/network_response.dart';
 import 'package:movies/data/repository/app_repository.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  NowPlayingResponse nowPlayingResponse;
-  Movies movieResponse;
-  PopularMovie popularMovieResponse;
+  MovieDatabaseModel allMovies;
+  PopularMoviesDatabaseModel allPopularMovies;
+  NowPlayingDatabaseModel allNowPlayingMovies;
+  final dbHelper = DBProvider.db;
 
   // DIFFERENT ERROR MESSAGES FOR THE VARIOUS LIST VIEWS ON THE UI
   String nowPlayingNetworkExceptionMessage = "";
@@ -40,12 +45,12 @@ class HomeViewModel extends ChangeNotifier {
   bool get isMovieResponseLoading => _isMovieResponseLoading;
 
   HomeViewModel() {
-    getMovieResponse();
-    getNowPlaying();
-    getPopularMovies();
+    _fetchMoviesAndSaveToDb();
+    _fetchNowPlayingAndSaveToDb();
+    _fetchPopularMoviesAndSaveToDb();
   }
 
-  void getMovieResponse() async {
+  void _fetchMoviesAndSaveToDb() async {
     /// Start showing the loader
     _isMovieResponseLoading = true;
     notifyListeners();
@@ -55,8 +60,9 @@ class HomeViewModel extends ChangeNotifier {
 
     /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
-      movieResponse = networkingResponse.dataResponse;
       _didFetchMovieCategory = true;
+      // save all the movies to th db
+      _saveMovieToDb(networkingResponse.dataResponse as Movies);
       notifyListeners();
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
@@ -70,7 +76,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getNowPlaying() async {
+  void _fetchNowPlayingAndSaveToDb() async {
     /// Start showing the loader
     _isNowPlayingLoading = true;
     notifyListeners();
@@ -78,10 +84,9 @@ class HomeViewModel extends ChangeNotifier {
     /// Wait for response
     NetworkResponse networkingResponse = await _appRepository.getNowPlayingMovies();
 
-    /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
-      nowPlayingResponse = networkingResponse.dataResponse;
       _didFetchNowPlaying = true;
+      _saveNowPlayingMoviesToDb(networkingResponse.dataResponse as NowPlayingResponse);
       notifyListeners();
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
@@ -95,7 +100,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getPopularMovies() async {
+  void _fetchPopularMoviesAndSaveToDb() async {
     /// Start showing the loader
     _isPopularMovieResponseLoading = true;
     notifyListeners();
@@ -103,12 +108,12 @@ class HomeViewModel extends ChangeNotifier {
     /// Wait for response
     NetworkResponse networkingResponse = await _appRepository.getPopularMovies();
 
-    /// We check the type of response and update the required field
     if (networkingResponse is NetworkingResponseData) {
-      popularMovieResponse = networkingResponse.dataResponse;
       _didFetchPopularMovies = true;
+      _savePopularMoviesToDb(networkingResponse.dataResponse as PopularMovie);
       notifyListeners();
-      print("popular movies is $popularMovieResponse");
+
+      print("popular movies is ${networkingResponse.dataResponse as PopularMovie}");
     } else if (networkingResponse is NetworkingException) {
       /// Updating the errorMessage when fails
       popularMoviesNetworkExceptionMessage = networkingResponse.message;
@@ -118,6 +123,39 @@ class HomeViewModel extends ChangeNotifier {
 
     /// Stop the loader
     _isPopularMovieResponseLoading = false;
+    notifyListeners();
+  }
+
+  void _saveMovieToDb(Movies movie) async {
+    print("save movie to db called");
+    int i = await dbHelper.saveMovie(movie.toDatabaseModel());
+    print("new inserted movie rowId is $i");
+
+    List<MovieDatabaseModel> allMovies = await dbHelper.getAllMovies();
+    this.allMovies = allMovies.first;
+    print("save movie to db movies are $allMovies");
+    notifyListeners();
+  }
+
+  void _savePopularMoviesToDb(PopularMovie popularMovies) async {
+    print("save savePopularMoviesToDb to db called");
+    int i = await dbHelper.savePopularMovies(popularMovies.toDatabaseModel());
+    print("new inserted popular movie rowId is $i");
+
+    List<PopularMoviesDatabaseModel> allPopularMovies = await dbHelper.getAllPopularMovies();
+    this.allPopularMovies = allPopularMovies.first;
+    print("save allPopularMovies to db are $allPopularMovies");
+    notifyListeners();
+  }
+
+  void _saveNowPlayingMoviesToDb(NowPlayingResponse nowPlayingResponse) async {
+    print("save saveNowPlayingMoviesToDb called");
+    int i = await dbHelper.saveNowPlaying(nowPlayingResponse.toDatabaseModel());
+    print("new inserted now playing movie rowId is $i");
+
+    List<NowPlayingDatabaseModel> allNowPlaying = await dbHelper.getAllNowPlaying();
+    this.allNowPlayingMovies = allNowPlaying.first;
+    print("save allPopularMovies to db are $allNowPlaying");
     notifyListeners();
   }
 }
