@@ -10,10 +10,9 @@ import 'package:movies/data/remote/wrapper/network_response.dart';
 import 'package:movies/data/repository/app_repository.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  MovieDatabaseModel allMovies;
+  final dbHelper = DBProvider.db;
   PopularMoviesDatabaseModel allPopularMovies;
   NowPlayingDatabaseModel allNowPlayingMovies;
-  final dbHelper = DBProvider.db;
 
   // DIFFERENT ERROR MESSAGES FOR THE VARIOUS LIST VIEWS ON THE UI
   String nowPlayingNetworkExceptionMessage = "";
@@ -45,12 +44,15 @@ class HomeViewModel extends ChangeNotifier {
   bool get isMovieResponseLoading => _isMovieResponseLoading;
 
   HomeViewModel() {
-    _fetchMoviesAndSaveToDb();
-    _fetchNowPlayingAndSaveToDb();
-    _fetchPopularMoviesAndSaveToDb();
+    fetchMoviesAndSaveToDb();
+    fetchNowPlayingAndSaveToDb();
+    fetchPopularMoviesAndSaveToDb();
+    //getAllNowPlayingMoviesFromDb();
+    //getAllPopularMoviesFromDb();
+    //getAllMoviesFromDb();
   }
 
-  void _fetchMoviesAndSaveToDb() async {
+  Future<void> fetchMoviesAndSaveToDb() async {
     /// Start showing the loader
     _isMovieResponseLoading = true;
     notifyListeners();
@@ -68,6 +70,7 @@ class HomeViewModel extends ChangeNotifier {
       /// Updating the errorMessage when fails
       movieCategoryNetworkExceptionMessage = networkingResponse.message;
       _didFetchMovieCategory = false;
+
       notifyListeners();
     }
 
@@ -76,7 +79,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _fetchNowPlayingAndSaveToDb() async {
+  Future<void> fetchNowPlayingAndSaveToDb() async {
     /// Start showing the loader
     _isNowPlayingLoading = true;
     notifyListeners();
@@ -100,7 +103,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _fetchPopularMoviesAndSaveToDb() async {
+  Future<void> fetchPopularMoviesAndSaveToDb() async {
     /// Start showing the loader
     _isPopularMovieResponseLoading = true;
     notifyListeners();
@@ -130,32 +133,37 @@ class HomeViewModel extends ChangeNotifier {
     print("save movie to db called");
     int i = await dbHelper.saveMovie(movie.toDatabaseModel());
     print("new inserted movie rowId is $i");
-
-    List<MovieDatabaseModel> allMovies = await dbHelper.getAllMovies();
-    this.allMovies = allMovies.first;
-    print("save movie to db movies are $allMovies");
-    notifyListeners();
   }
 
   void _savePopularMoviesToDb(PopularMovie popularMovies) async {
     print("save savePopularMoviesToDb to db called");
     int i = await dbHelper.savePopularMovies(popularMovies.toDatabaseModel());
     print("new inserted popular movie rowId is $i");
+  }
 
+  Future<PopularMoviesDatabaseModel> getAllPopularMoviesFromDb() async {
     List<PopularMoviesDatabaseModel> allPopularMovies = await dbHelper.getAllPopularMovies();
     this.allPopularMovies = allPopularMovies.first;
-    print("save allPopularMovies to db are $allPopularMovies");
-    notifyListeners();
+    print("all saved popularMovies are $allPopularMovies");
+    return allPopularMovies.first;
+  }
+
+  Future<MovieDatabaseModel> getAllMoviesFromDb() async {
+    List<MovieDatabaseModel> allMovies = await dbHelper.getAllMovies();
+    print("saved movies to db movies are $allMovies");
+    return allMovies.first;
+  }
+
+  Future<NowPlayingDatabaseModel> getAllNowPlayingMoviesFromDb() async {
+    List<NowPlayingDatabaseModel> allNowPlaying = await dbHelper.getAllNowPlaying();
+    this.allNowPlayingMovies = allNowPlaying.first;
+    print("saved nowPlaying movies from db are $allNowPlaying");
+    return allNowPlaying.first;
   }
 
   void _saveNowPlayingMoviesToDb(NowPlayingResponse nowPlayingResponse) async {
-    print("save saveNowPlayingMoviesToDb called");
+    print("_saveNowPlayingMoviesToDb() called");
     int i = await dbHelper.saveNowPlaying(nowPlayingResponse.toDatabaseModel());
-    print("new inserted now playing movie rowId is $i");
-
-    List<NowPlayingDatabaseModel> allNowPlaying = await dbHelper.getAllNowPlaying();
-    this.allNowPlayingMovies = allNowPlaying.first;
-    print("save allPopularMovies to db are $allNowPlaying");
-    notifyListeners();
+    print("new inserted nowPlaying movie rowId is $i");
   }
 }

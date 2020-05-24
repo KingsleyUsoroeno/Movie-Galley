@@ -19,6 +19,13 @@ class DBProvider extends DatabaseWrapper {
   final String nowPlaying = "nowPlaying";
   final String popularMovies = "popularMovies";
 
+  // COLUMN NAMES
+  final String _columnId = "id";
+  final String _columnPage = "page";
+  final String _columnTotalResults = "totalResults";
+  final String _columnTotalPages = "totalPages";
+  final String _columnMovieResults = "movieResults";
+
   Future<Database> get database async {
     // If database exists, return database
     if (_database != null) return _database;
@@ -39,28 +46,28 @@ class DBProvider extends DatabaseWrapper {
 
   void _createDb(Database db) {
     String sqlCreateMovieTable = 'CREATE TABLE $movies('
-        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-        'page INTEGER,'
-        'totalResults INTEGER,'
-        'totalPages INTEGER,'
-        'movieResults TEXT'
+        '$_columnId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$_columnPage INTEGER,'
+        '$_columnTotalResults INTEGER,'
+        '$_columnTotalPages INTEGER,'
+        '$_columnMovieResults TEXT'
         ')';
 
     String sqlCreateNowPlayingMoviesTable = 'CREATE TABLE $nowPlaying('
-        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-        'page INTEGER,'
-        'totalResults INTEGER,'
-        'totalPages INTEGER,'
+        '$_columnId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$_columnPage INTEGER,'
+        '$_columnTotalResults INTEGER,'
+        '$_columnTotalPages INTEGER,'
         'dates TEXT,'
-        'movieResults TEXT'
+        '$_columnMovieResults TEXT'
         ')';
 
     String sqlCreatePopularMoviesTable = 'CREATE TABLE $popularMovies('
-        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-        'page INTEGER,'
-        'totalResults INTEGER,'
-        'totalPages INTEGER,'
-        'movieResults TEXT'
+        '$_columnId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$_columnPage INTEGER,'
+        '$_columnTotalResults INTEGER,'
+        '$_columnTotalPages INTEGER,'
+        '$_columnMovieResults TEXT'
         ')';
     db.execute(sqlCreateMovieTable);
     db.execute(sqlCreateNowPlayingMoviesTable);

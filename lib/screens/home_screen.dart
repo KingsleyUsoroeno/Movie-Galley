@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:movies/data/model/database/model/movie_model.dart';
+import 'package:movies/data/model/database/model/popular_movie_model.dart';
 import 'package:movies/screens/viewmodel/home_view_model.dart';
+import 'package:movies/screens/widgets/popular_movies.dart';
 import 'package:stacked/stacked.dart';
 
 import '../data/remote/model/Result.dart';
@@ -8,49 +11,59 @@ import 'viewmodel/home_view_model.dart';
 import 'widgets/custom_search_view.dart';
 import 'widgets/movie_category.dart';
 import 'widgets/now_playing.dart';
-import 'widgets/popular_movies.dart';
 
+// Todo test Offline and online functionalities and work on image rendering when offline
 class HomeScreen extends StatelessWidget {
   Widget _buildMovieCategory(HomeViewModel viewModel) {
     // loading state
     if (viewModel.isMovieResponseLoading) {
       return _buildProgressIndicator();
-    }
-    if (viewModel.didFetchMovieCategory) {
-      // success state
-      return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: viewModel.allMovies != null ? viewModel.allMovies.results.length : 0,
-        itemBuilder: (context, int index) {
-          Results result = viewModel.allMovies.results[index];
-          return MovieCategory(movieResult: result);
+    } else
+      return FutureBuilder(
+        future: viewModel.getAllMoviesFromDb(),
+        builder: (BuildContext context, AsyncSnapshot<MovieDatabaseModel> snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data != null ? snapshot.data.results.length : 0,
+              itemBuilder: (context, int index) {
+                Results result = snapshot.data.results[index];
+                return MovieCategory(movieResult: result);
+              },
+            );
+          }
+          if (!snapshot.hasData) {
+            return _showErrorText(viewModel.movieCategoryNetworkExceptionMessage);
+          } else
+            return Container();
         },
       );
-    } else {
-      // error state
-      return _showErrorText(viewModel.movieCategoryNetworkExceptionMessage);
-    }
   }
 
   Widget _buildNowPlaying(HomeViewModel viewModel) {
     // loading state
     if (viewModel.isNowPlayingLoading) {
       return _buildProgressIndicator();
-    }
-    if (viewModel.didFetchNowPlaying) {
-      // success state
-      return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: viewModel.allNowPlayingMovies != null ? viewModel.allNowPlayingMovies.results.length : 0,
-        itemBuilder: (context, int index) {
-          Results nowPlayingMovieResult = viewModel.allNowPlayingMovies.results[index];
-          return NowPlaying(nowPlayingResult: nowPlayingMovieResult);
+    } else
+      return FutureBuilder(
+        future: viewModel.getAllNowPlayingMoviesFromDb(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data != null ? snapshot.data.results.length : 0,
+              itemBuilder: (context, int index) {
+                Results nowPlayingMovieResult = snapshot.data.results[index];
+                return NowPlaying(nowPlayingResult: nowPlayingMovieResult);
+              },
+            );
+          }
+          if (!snapshot.hasData) {
+            return _showErrorText(viewModel.nowPlayingNetworkExceptionMessage);
+          } else
+            return Container();
         },
       );
-    } else {
-      // error state
-      return _showErrorText(viewModel.nowPlayingNetworkExceptionMessage);
-    }
   }
 
   Widget _showErrorText(String errorMessage) {
@@ -63,21 +76,27 @@ class HomeScreen extends StatelessWidget {
     // loading state
     if (viewModel.isPopularMovieResponseLoading) {
       return _buildProgressIndicator();
-    }
-    if (viewModel.didFetchPopularMovies) {
-      // success state
-      return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: viewModel.allPopularMovies != null ? viewModel.allPopularMovies.results.length : 0,
-        itemBuilder: (context, int index) {
-          Results result = viewModel.allPopularMovies.results[index];
-          return PopularMovies(popularMovies: result);
+    } else
+      return FutureBuilder(
+        future: viewModel.getAllPopularMoviesFromDb(),
+        builder: (BuildContext context, AsyncSnapshot<PopularMoviesDatabaseModel> snapshot) {
+          if (snapshot.hasData) {
+            // success state
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data != null ? snapshot.data.results.length : 0,
+              itemBuilder: (context, int index) {
+                Results result = snapshot.data.results[index];
+                return PopularMovies(popularMovies: result);
+              },
+            );
+          }
+          if (!snapshot.hasData) {
+            return _showErrorText(viewModel.popularMoviesNetworkExceptionMessage);
+          } else
+            return Container();
         },
       );
-    } else {
-      // error state
-      return _showErrorText(viewModel.popularMoviesNetworkExceptionMessage);
-    }
   }
 
   Widget _buildProgressIndicator() {
@@ -136,16 +155,19 @@ class HomeScreen extends StatelessWidget {
                           SizedBox(height: 10.0),
                           Container(height: 130, child: _buildMovieCategory(viewModel)),
                           SizedBox(height: 20.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text('Now Playing', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600)),
-                              GestureDetector(
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+                            Text('Now Playing', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600)),
+                            GestureDetector(
                                 child: Text('View more', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                onTap: () => {},
-                              ),
-                            ],
-                          ),
+                                onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => MovieGrid(
+                                          movieResults: viewModel.allNowPlayingMovies.results,
+                                          tag: "Now Playing",
+                                        ),
+                                      ),
+                                    )),
+                          ]),
                           SizedBox(height: 8.0),
                           Container(height: 170, child: _buildNowPlaying(viewModel)),
                           SizedBox(height: 20.0),
