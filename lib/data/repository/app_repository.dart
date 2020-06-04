@@ -6,6 +6,7 @@ class AppRepository {
   /// The Repository will take care of getting the data from thr right source
   /// Only AppRepository knows that it has to call NetworkRepo()
   /// ViewModel doesn't care if its coming from API or Offline Cache
+  /// check if there is data in the
 
   final networkService = NetworkService();
 

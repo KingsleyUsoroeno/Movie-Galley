@@ -28,6 +28,8 @@ dependencies:
   transparent_image: ^1.0.0
   sqflite:
   path_provider:
+  flutter_bloc: ^4.0.0
+  equatable: ^0.6.1
 
 dev_dependencies:
   flutter_test:
