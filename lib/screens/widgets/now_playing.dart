@@ -9,6 +9,8 @@ class NowPlaying extends StatelessWidget {
   NowPlaying({this.nowPlayingResult});
 
   final String imageUrl = 'https://image.tmdb.org/t/p/w500/';
+  final String defaultImageUrl =
+      "https://i0.wp.com/asiatimes.com/wp-content/uploads/2020/03/Screen-Shot-2020-03-02-at-11.37.50-AM.png?fit=850%2C486&ssl=1";
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,10 @@ class NowPlaying extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
                   child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage, image: imageUrl + nowPlayingResult.posterPath, fit: BoxFit.cover, width: 90),
+                      placeholder: kTransparentImage,
+                      image: nowPlayingResult.posterPath != null ? imageUrl + nowPlayingResult.posterPath : defaultImageUrl,
+                      fit: BoxFit.cover,
+                      width: 90),
                 )),
             SizedBox(height: 10.0),
             Expanded(

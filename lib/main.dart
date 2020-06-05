@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/data/bloc/movie_event.dart';
-import 'package:movies/data/bloc/movies_bloc.dart';
+import 'package:movies/data/bloc/movie/movie_category/bloc.dart';
+import 'package:movies/data/bloc/movie/now_playing/bloc.dart';
+import 'package:movies/data/bloc/movie/popular_movie/bloc.dart';
 import 'package:movies/data/repository/app_repository.dart';
 import 'package:movies/screens/home_screen.dart';
 
@@ -10,8 +11,19 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MovieBloc>(
-      create: (_) => MovieBloc(repository: AppRepository())..add(AppStarted()),
+    final repository = AppRepository();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<MovieBloc>(
+          create: (_) => MovieBloc(appRepository: repository)..add(FetchMovies()),
+        ),
+        BlocProvider<NowPlayingMoviesBloc>(
+          create: (_) => NowPlayingMoviesBloc(appRepository: repository)..add(FetchNowPlayingMovies()),
+        ),
+        BlocProvider<PopularMovieBloc>(
+          create: (BuildContext context) => PopularMovieBloc(appRepository: repository)..add(FetchPopularMovies()),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Movie Gallery',
