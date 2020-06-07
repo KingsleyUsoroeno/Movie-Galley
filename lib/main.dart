@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/data/bloc/movie/movie_category/bloc.dart';
-import 'package:movies/data/bloc/movie/now_playing/bloc.dart';
-import 'package:movies/data/bloc/movie/popular_movie/bloc.dart';
-import 'package:movies/data/repository/app_repository.dart';
-import 'package:movies/screens/home_screen.dart';
+import 'package:movies/features/movies/data/bloc/movie/movie_category/movie_bloc.dart';
+import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_movies_bloc.dart';
+import 'package:movies/features/movies/data/bloc/movie/popular_movie/popular_movie_bloc.dart';
 
-void main() => runApp(MyApp());
+import 'features/movies/data/bloc/movie/movie_category/movie_bloc_event.dart';
+import 'features/movies/data/bloc/movie/now_playing/now_playing_movies_event.dart';
+import 'features/movies/data/bloc/movie/popular_movie/popular_movie_event.dart';
+import 'features/movies/ui/screens/home_screen.dart';
+import 'injection_container.dart' as di;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final repository = AppRepository();
     return MultiBlocProvider(
       providers: [
         BlocProvider<MovieBloc>(
-          create: (_) => MovieBloc(appRepository: repository)..add(FetchMovies()),
+          create: (_) => di.injector<MovieBloc>()..add(FetchMovies()),
         ),
         BlocProvider<NowPlayingMoviesBloc>(
-          create: (_) => NowPlayingMoviesBloc(appRepository: repository)..add(FetchNowPlayingMovies()),
+          create: (_) => di.injector<NowPlayingMoviesBloc>()..add(FetchNowPlayingMovies()),
         ),
         BlocProvider<PopularMovieBloc>(
-          create: (BuildContext context) => PopularMovieBloc(appRepository: repository)..add(FetchPopularMovies()),
+          create: (BuildContext context) => di.injector<PopularMovieBloc>()..add(FetchPopularMovies()),
         ),
       ],
       child: MaterialApp(

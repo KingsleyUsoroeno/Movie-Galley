@@ -30,6 +30,12 @@ dependencies:
   path_provider:
   flutter_bloc: ^4.0.0
   equatable: ^0.6.1
+  # Functional programming thingies
+  dartz: ^0.8.9
+  # Remote API
+  data_connection_checker: ^0.3.4
+  # Service locator
+  get_it: ^3.1.0
 
 dev_dependencies:
   flutter_test:
