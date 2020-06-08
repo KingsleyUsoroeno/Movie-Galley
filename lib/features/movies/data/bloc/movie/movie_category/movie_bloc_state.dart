@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:movies/features/movies/data/local/model/database/model/movie_model.dart';
+import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
 
 abstract class MovieBlocState extends Equatable {
   const MovieBlocState();

@@ -11,7 +11,7 @@ import 'features/movies/data/bloc/movie/movie_category/movie_bloc.dart';
 import 'features/movies/data/bloc/movie/now_playing/now_playing_movies_bloc.dart';
 import 'features/movies/data/bloc/movie/popular_movie/popular_movie_bloc.dart';
 import 'features/movies/data/datasource/movies_remote_data_source.dart';
-import 'features/movies/data/local/model/database/db/db_helper.dart';
+import 'features/movies/data/local/database/db/db_helper.dart';
 
 final injector = GetIt.instance;
 

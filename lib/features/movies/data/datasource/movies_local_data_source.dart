@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
 import 'package:movies/core/error/exceptions.dart';
-import 'package:movies/features/movies/data/local/model/database/db/db_helper.dart';
-import 'package:movies/features/movies/data/local/model/database/model/movie_model.dart';
-import 'package:movies/features/movies/data/local/model/database/model/now_playing_movies_model.dart';
-import 'package:movies/features/movies/data/local/model/database/model/popular_movie_model.dart';
+import 'package:movies/features/movies/data/local/database/db/db_helper.dart';
+import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
+import 'package:movies/features/movies/data/local/database/model/now_playing_movies_model.dart';
+import 'package:movies/features/movies/data/local/database/model/popular_movie_model.dart';
 import 'package:movies/features/movies/data/remote/model/movies.dart';
 import 'package:movies/features/movies/data/remote/model/now_playing.dart';
 import 'package:movies/features/movies/data/remote/model/popular_movie.dart';
@@ -28,6 +28,8 @@ abstract class MoviesLocalDataSource {
   Future<void> cacheNowPlayingMovies(NowPlayingResponse nowPlaying);
 
   Future<void> cachePopularMovies(PopularMovie popularMovie);
+
+  Future<void> updateCacheNowPlayingMovies(NowPlayingMoviesDatabaseModel nowPlayingMovies);
 }
 
 class MoviesLocalDataSourceImpl implements MoviesLocalDataSource {
@@ -75,5 +77,10 @@ class MoviesLocalDataSourceImpl implements MoviesLocalDataSource {
   @override
   Future<void> cachePopularMovies(PopularMovie popularMovie) {
     return dbProvider.savePopularMovies(popularMovie.toDatabaseModel());
+  }
+
+  @override
+  Future<void> updateCacheNowPlayingMovies(NowPlayingMoviesDatabaseModel nowPlayingMovies) {
+    return dbProvider.updateNowPlaying(nowPlayingMovies);
   }
 }

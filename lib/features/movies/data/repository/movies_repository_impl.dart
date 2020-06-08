@@ -5,10 +5,9 @@ import 'package:movies/core/error/failures.dart';
 import 'package:movies/core/network_info.dart';
 import 'package:movies/features/movies/data/datasource/movies_local_data_source.dart';
 import 'package:movies/features/movies/data/datasource/movies_remote_data_source.dart';
-import 'package:movies/features/movies/data/local/model/database/model/movie_model.dart';
-import 'package:movies/features/movies/data/local/model/database/model/now_playing_movies_model.dart';
-import 'package:movies/features/movies/data/local/model/database/model/popular_movie_model.dart';
-import 'package:movies/features/movies/data/remote/model/Result.dart';
+import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
+import 'package:movies/features/movies/data/local/database/model/now_playing_movies_model.dart';
+import 'package:movies/features/movies/data/local/database/model/popular_movie_model.dart';
 import 'package:movies/features/movies/data/remote/model/movies.dart';
 import 'package:movies/features/movies/data/remote/model/now_playing.dart';
 import 'package:movies/features/movies/data/remote/model/popular_movie.dart';
@@ -49,7 +48,7 @@ class MoviesRepositoryImpl implements MoviesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Results>>> fetchMoreNowPlayingMovies({bool loadMore = false}) async {
+  Future<Either<Failure, NowPlayingMoviesDatabaseModel>> fetchMoreNowPlayingMovies({bool loadMore = false}) async {
     return await _fetchMoreNowPlayingMovies(() {
       return remoteDataSource.getNowPlayingMovies(loadMore: loadMore);
     });
@@ -80,7 +79,7 @@ class MoviesRepositoryImpl implements MoviesRepository {
       try {
         final nowPlayingMovie = await nowPlayingMovies();
         localDataSource.cacheNowPlayingMovies(nowPlayingMovie);
-        print("now playing movie result length is ${nowPlayingMovie.results.length}");
+        print("initial now playing movie result length is ${nowPlayingMovie.results.length}");
         return Right(nowPlayingMovie.toDatabaseModel());
       } on ServerException {
         return Left(ServerFailure());
@@ -114,19 +113,23 @@ class MoviesRepositoryImpl implements MoviesRepository {
     }
   }
 
-  Future<Either<Failure, List<Results>>> _fetchMoreNowPlayingMovies(_FetchMoreNowPlayingMovies movies) async {
+  Future<Either<Failure, NowPlayingMoviesDatabaseModel>> _fetchMoreNowPlayingMovies(_FetchMoreNowPlayingMovies nowPlayingMovie) async {
     if (await networkInfo.isConnected) {
       try {
         print("fetching more now paying movies called");
-        final nowPlayingMovies = await movies();
-        return Right(nowPlayingMovies.results);
+        final nowPlayingMovies = await nowPlayingMovie();
+        final savedMovies = await localDataSource.getNowPlayingMovies();
+        savedMovies.results.addAll(nowPlayingMovies.results);
+        print("new savedMovies length is ${savedMovies.results.length}");
+        localDataSource.updateCacheNowPlayingMovies(savedMovies);
+        return Right(await localDataSource.getNowPlayingMovies());
       } on ServerException {
         return Left(ServerFailure());
       }
     } else {
       try {
         final savedMovies = await localDataSource.getNowPlayingMovies();
-        return Right(savedMovies.results);
+        return Right(savedMovies);
       } on CacheException {
         return Left(CacheFailure());
       }

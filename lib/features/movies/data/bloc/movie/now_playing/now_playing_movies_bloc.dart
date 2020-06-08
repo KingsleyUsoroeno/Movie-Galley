@@ -4,8 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:movies/core/error/failures.dart';
-import 'package:movies/features/movies/data/local/model/database/model/now_playing_movies_model.dart';
-import 'package:movies/features/movies/data/remote/model/Result.dart';
+import 'package:movies/features/movies/data/local/database/model/now_playing_movies_model.dart';
 import 'package:movies/features/movies/data/repository/movies_repository.dart';
 
 import 'bloc.dart';
@@ -38,7 +37,7 @@ class NowPlayingMoviesBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesS
   }
 
   Stream<NowPlayingMoviesState> _mapLoadMoreMoviesToState(FetchMoreMovies event) async* {
-    //yield NowPlayingMovieLoading();
+    //yield NowPlayingMovieLoading(); // uncomment if you want to be notified of a loading indicator on the UI
     yield* _fetchMoreMovies(event.loadMore);
   }
 
@@ -49,7 +48,7 @@ class NowPlayingMoviesBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesS
 
   Stream<NowPlayingMoviesState> _fetchMoreMovies(bool loadMore) async* {
     final failureOrMovie = await _repository.fetchMoreNowPlayingMovies(loadMore: loadMore);
-    yield* _eitherLoadedMoreMovieOrErrorState(failureOrMovie);
+    yield* _eitherLoadedOrErrorState(failureOrMovie);
   }
 
   String _mapFailureToMessage(Failure failure) {
@@ -70,10 +69,10 @@ class NowPlayingMoviesBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesS
     );
   }
 
-  Stream<NowPlayingMoviesState> _eitherLoadedMoreMovieOrErrorState(Either<Failure, List<Results>> failureOrMovies) async* {
-    yield failureOrMovies.fold(
-      (failure) => NowPlayingMovieError(errorMessage: _mapFailureToMessage(failure)),
-      (movie) => NowPlayingMovieLoadMore(movies: movie),
-    );
-  }
+//  Stream<NowPlayingMoviesState> _eitherLoadedMoreMovieOrErrorState(Either<Failure, NowPlayingMoviesDatabaseModel> failureOrMovies) async* {
+//    yield failureOrMovies.fold(
+//      (failure) => NowPlayingMovieError(errorMessage: _mapFailureToMessage(failure)),
+//      (movie) => NowPlayingMovieLoaded(nowPlayingMovies: movie),
+//    );
+//  }
 }

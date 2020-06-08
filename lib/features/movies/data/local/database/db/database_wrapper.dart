@@ -1,6 +1,6 @@
-import 'package:movies/features/movies/data/local/model/database/model/movie_model.dart';
-import 'package:movies/features/movies/data/local/model/database/model/now_playing_movies_model.dart';
-import 'package:movies/features/movies/data/local/model/database/model/popular_movie_model.dart';
+import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
+import 'package:movies/features/movies/data/local/database/model/now_playing_movies_model.dart';
+import 'package:movies/features/movies/data/local/database/model/popular_movie_model.dart';
 
 abstract class DatabaseWrapper {
   Future<int> saveMovie(MovieDatabaseModel movie);

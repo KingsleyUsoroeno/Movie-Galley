@@ -43,7 +43,8 @@ class HomeScreen extends StatelessWidget {
         if (state is NowPlayingMovieLoading) {
           return _buildProgressIndicator();
         } else if (state is NowPlayingMovieLoaded) {
-          final movies = state.nowPlayingMovies;
+          // take 20 elements from the list and returns a new list
+          final movies = state.nowPlayingMovies.results.take(20).toList();
           return Column(
             children: <Widget>[
               Row(
@@ -60,9 +61,9 @@ class HomeScreen extends StatelessWidget {
                   height: 170,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: movies.results != null ? movies.results.length : 0,
+                    itemCount: movies != null ? movies.length : 0,
                     itemBuilder: (context, int index) {
-                      Results result = movies.results[index];
+                      Results result = movies[index];
                       return NowPlaying(nowPlayingResult: result);
                     },
                   )),

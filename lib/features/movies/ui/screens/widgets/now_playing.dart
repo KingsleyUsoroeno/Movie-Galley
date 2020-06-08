@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:movies/core/constant.dart';
+import 'package:movies/core/network_info.dart';
 import 'package:movies/features/movies/data/remote/model/Result.dart';
 import 'package:movies/features/movies/ui/screens/movies/movie_detail.dart';
 import 'package:transparent_image/transparent_image.dart';
+
+import '../../../../../injection_container.dart';
 
 class NowPlaying extends StatelessWidget {
   final Results nowPlayingResult;
 
   NowPlaying({this.nowPlayingResult});
-
-  final String imageUrl = 'https://image.tmdb.org/t/p/w500/';
-  final String defaultImageUrl =
-      "https://i0.wp.com/asiatimes.com/wp-content/uploads/2020/03/Screen-Shot-2020-03-02-at-11.37.50-AM.png?fit=850%2C486&ssl=1";
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +22,7 @@ class NowPlaying extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Expanded(
-                flex: 80,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
-                  child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: nowPlayingResult.posterPath != null ? imageUrl + nowPlayingResult.posterPath : defaultImageUrl,
-                      fit: BoxFit.cover,
-                      width: 90),
-                )),
+            _buildImage(),
             SizedBox(height: 10.0),
             Expanded(
               flex: 13,
@@ -54,6 +45,35 @@ class NowPlaying extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildImage() {
+    final networkInfo = injector<NetworkInfo>();
+    return FutureBuilder<bool>(
+      future: networkInfo.isConnected,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.data == true) {
+          return Expanded(
+            flex: 80,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage, image: Constants.IMAGE_URL + nowPlayingResult.posterPath, fit: BoxFit.cover, width: 90),
+            ),
+          );
+        } else if (snapshot.data == false) {
+          return Expanded(
+            flex: 80,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child:
+                  FadeInImage.assetNetwork(image: Constants.OFFLINE_IMAGE_URL, placeholder: Constants.OFFLINE_IMAGE_URL, fit: BoxFit.cover),
+            ),
+          );
+        }
+        return Container();
+      },
     );
   }
 }

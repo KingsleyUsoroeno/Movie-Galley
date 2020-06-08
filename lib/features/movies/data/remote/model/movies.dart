@@ -1,4 +1,4 @@
-import 'package:movies/features/movies/data/local/model/database/model/movie_model.dart';
+import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
 
 import 'Result.dart';
 

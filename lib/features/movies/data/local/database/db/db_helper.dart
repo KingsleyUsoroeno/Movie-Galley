@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:movies/features/movies/data/local/model/database/model/movie_model.dart';
-import 'package:movies/features/movies/data/local/model/database/model/now_playing_movies_model.dart';
-import 'package:movies/features/movies/data/local/model/database/model/popular_movie_model.dart';
+import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
+import 'package:movies/features/movies/data/local/database/model/now_playing_movies_model.dart';
+import 'package:movies/features/movies/data/local/database/model/popular_movie_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';

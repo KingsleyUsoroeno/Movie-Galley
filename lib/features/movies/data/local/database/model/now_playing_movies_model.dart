@@ -5,7 +5,7 @@ import 'package:movies/features/movies/data/remote/model/date.dart';
 
 import 'movie_model.dart';
 
-String datesToJson(Dates dates) => json.encode(dates.toJson());
+String datesToJson(Dates dates) => dates != null ? json.encode(dates.toJson()) : json.encode("");
 
 Dates datesFromJson(String str) => Dates.fromJson(json.decode(str));
 

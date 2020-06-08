@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:movies/core/error/failures.dart';
-import 'package:movies/features/movies/data/local/model/database/model/movie_model.dart';
+import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
 import 'package:movies/features/movies/data/repository/movies_repository.dart';
 
 import 'movie_bloc_event.dart';
