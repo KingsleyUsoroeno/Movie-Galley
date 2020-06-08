@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/features/movies/data/bloc/movie/movie_category/bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/movie_category/movie_bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/movie_category/movie_bloc_state.dart';
-import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_movies_bloc.dart';
+import 'package:movies/features/movies/data/bloc/movie/now_playing/bloc.dart';
+import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_movie_bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_movies_state.dart';
+import 'package:movies/features/movies/data/bloc/movie/popular_movie/bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/popular_movie/popular_movie_bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/popular_movie/popular_movie_state.dart';
 import 'package:movies/features/movies/data/remote/model/Result.dart';
@@ -12,6 +15,8 @@ import 'package:movies/features/movies/ui/screens/widgets/now_playing.dart';
 import 'movies/now_playing_detail_screen.dart';
 import 'widgets/custom_search_view.dart';
 import 'widgets/movie_category.dart';
+
+// Todo add Pagination for PopularMovies
 
 class HomeScreen extends StatelessWidget {
   Widget _buildMovieCategory(BuildContext context) {
@@ -38,12 +43,12 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildNowPlaying(BuildContext context) {
-    return BlocBuilder<NowPlayingMoviesBloc, NowPlayingMoviesState>(
+    return BlocBuilder<NowPlayingMovieBloc, NowPlayingMoviesState>(
       builder: (context, NowPlayingMoviesState state) {
         if (state is NowPlayingMovieLoading) {
           return _buildProgressIndicator();
         } else if (state is NowPlayingMovieLoaded) {
-          // take 20 elements from the list and returns a new list
+          // take 20 elements from the list and returns a new list the Api returns a total of 20 Movies per page
           final movies = state.nowPlayingMovies.results.take(20).toList();
           return Column(
             children: <Widget>[
@@ -132,71 +137,79 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          backgroundColor: Theme.of(context).primaryColor,
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  height: MediaQuery.of(context).size.height * 0.25,
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage("assets/images/daniel-craig.jpg"),
-                          radius: 25.0,
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.bloc<MovieBloc>().add(RefreshMovies());
+        context.bloc<NowPlayingMovieBloc>().add(RefreshNowPlayingMovies());
+        context.bloc<PopularMovieBloc>().add(RefreshPopularMovies());
+      },
+      child: SafeArea(
+        child: Scaffold(
+            backgroundColor: Theme.of(context).primaryColor,
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: CircleAvatar(
+                            backgroundImage: AssetImage("assets/images/daniel-craig.jpg"),
+                            radius: 25.0,
+                          ),
                         ),
-                      ),
-                      Text('Hey, James Bond!',
-                          style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600), textAlign: TextAlign.center),
-                      SizedBox(height: 10),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 40.0),
-                          child: Text('What would you like to watch today ?',
-                              style: TextStyle(color: Colors.white, fontSize: 26.0, fontWeight: FontWeight.bold)),
-                        ),
-                      )
-                    ],
+                        Text('Hey, James Bond!',
+                            style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center),
+                        SizedBox(height: 10),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 40.0),
+                            child: Text('What would you like to watch today ?',
+                                style: TextStyle(color: Colors.white, fontSize: 26.0, fontWeight: FontWeight.bold)),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-                  width: double.infinity,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(40.0)), color: Colors.white),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // SEARCH VIEW
-                      SearchView(),
-                      SizedBox(height: 10.0),
-                      Container(height: 130, child: _buildMovieCategory(context)),
-                      SizedBox(height: 20.0),
-                      // NOW PLAYING MOVIES
-                      _buildNowPlaying(context),
-                      SizedBox(height: 20.0),
-                      // POPULAR MOVIES
-                      _buildPopularMovies(context)
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+                    width: double.infinity,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(40.0)), color: Colors.white),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // SEARCH VIEW
+                        SearchView(),
+                        SizedBox(height: 10.0),
+                        Container(height: 130, child: _buildMovieCategory(context)),
+                        SizedBox(height: 20.0),
+                        // NOW PLAYING MOVIES
+                        _buildNowPlaying(context),
+                        SizedBox(height: 20.0),
+                        // POPULAR MOVIES
+                        _buildPopularMovies(context)
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )),
+      ),
     );
   }
 
   void _navigateToNowPlayingDetailScreen(BuildContext context, List<Results> movies) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (_) => BlocProvider.value(
-          value: BlocProvider.of<NowPlayingMoviesBloc>(context), child: NowPlayingDetailScreen(movieResults: movies, tag: "")),
+          value: BlocProvider.of<NowPlayingMovieBloc>(context), child: NowPlayingDetailScreen(movieResults: movies, tag: "")),
     ));
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/movie_category/movie_bloc.dart';
-import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_movies_bloc.dart';
+import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_movie_bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/popular_movie/popular_movie_bloc.dart';
 
 import 'features/movies/data/bloc/movie/movie_category/movie_bloc_event.dart';
@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<MovieBloc>(
           create: (_) => di.injector<MovieBloc>()..add(FetchMovies()),
         ),
-        BlocProvider<NowPlayingMoviesBloc>(
-          create: (_) => di.injector<NowPlayingMoviesBloc>()..add(FetchNowPlayingMovies()),
+        BlocProvider<NowPlayingMovieBloc>(
+          create: (_) => di.injector<NowPlayingMovieBloc>()..add(FetchNowPlayingMovies()),
         ),
         BlocProvider<PopularMovieBloc>(
           create: (BuildContext context) => di.injector<PopularMovieBloc>()..add(FetchPopularMovies()),

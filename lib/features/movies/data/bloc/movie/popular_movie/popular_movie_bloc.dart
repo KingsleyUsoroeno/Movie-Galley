@@ -26,6 +26,8 @@ class PopularMovieBloc extends Bloc<PopularMovieEvent, PopularMovieState> {
   Stream<PopularMovieState> mapEventToState(PopularMovieEvent event) async* {
     if (event is FetchPopularMovies) {
       yield* _mapFetchPopularMoviesToState();
+    } else if (event is RefreshPopularMovies) {
+      yield* _mapFetchPopularMoviesToState();
     }
   }
 

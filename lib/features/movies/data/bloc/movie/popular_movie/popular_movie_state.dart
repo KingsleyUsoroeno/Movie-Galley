@@ -10,8 +10,6 @@ abstract class PopularMovieState extends Equatable {
 
 class InitialPopularMovieState extends PopularMovieState {}
 
-class PopularMovieEmpty extends PopularMovieState {}
-
 class PopularMovieLoading extends PopularMovieState {}
 
 class PopularMovieLoaded extends PopularMovieState {

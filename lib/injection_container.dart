@@ -8,7 +8,7 @@ import 'package:movies/features/movies/data/service/movie_api_service.dart';
 
 import 'core/network_info.dart';
 import 'features/movies/data/bloc/movie/movie_category/movie_bloc.dart';
-import 'features/movies/data/bloc/movie/now_playing/now_playing_movies_bloc.dart';
+import 'features/movies/data/bloc/movie/now_playing/now_playing_movie_bloc.dart';
 import 'features/movies/data/bloc/movie/popular_movie/popular_movie_bloc.dart';
 import 'features/movies/data/datasource/movies_remote_data_source.dart';
 import 'features/movies/data/local/database/db/db_helper.dart';
@@ -19,7 +19,7 @@ Future<void> init() async {
   //! Features - MovieBloc Bloc
   injector.registerFactory(() => MovieBloc(appRepository: injector.get()));
 
-  injector.registerFactory(() => NowPlayingMoviesBloc(appRepository: injector.get()));
+  injector.registerFactory(() => NowPlayingMovieBloc(appRepository: injector.get()));
 
   injector.registerFactory(() => PopularMovieBloc(appRepository: injector.get()));
 

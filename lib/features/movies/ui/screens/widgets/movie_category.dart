@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/core/constant.dart';
 import 'package:movies/features/movies/data/remote/model/Result.dart';
 import 'package:movies/features/movies/ui/screens/movies/movie_detail.dart';
 
@@ -6,8 +7,6 @@ class MovieCategory extends StatelessWidget {
   final Results movieResult;
 
   MovieCategory({this.movieResult});
-
-  final String imageUrl = 'https://image.tmdb.org/t/p/w500/';
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class MovieCategory extends StatelessWidget {
             width: 200,
             margin: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(imageUrl + movieResult.posterPath), fit: BoxFit.cover),
+                image: DecorationImage(image: NetworkImage(Constants.IMAGE_URL + movieResult.posterPath), fit: BoxFit.cover),
                 borderRadius: BorderRadius.circular(20.0)),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),

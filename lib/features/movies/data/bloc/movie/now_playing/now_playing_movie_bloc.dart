@@ -12,10 +12,10 @@ import 'bloc.dart';
 const String SERVER_FAILURE_MESSAGE = 'Server Failure';
 const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
 
-class NowPlayingMoviesBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesState> {
+class NowPlayingMovieBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesState> {
   final MoviesRepository _repository;
 
-  NowPlayingMoviesBloc({@required MoviesRepository appRepository})
+  NowPlayingMovieBloc({@required MoviesRepository appRepository})
       : assert(appRepository != null),
         _repository = appRepository;
 
@@ -28,6 +28,8 @@ class NowPlayingMoviesBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesS
       yield* _mapFetchNowPlayingMoviesToState();
     } else if (event is FetchMoreMovies) {
       yield* _mapLoadMoreMoviesToState(event);
+    } else if (event is RefreshNowPlayingMovies) {
+      yield* _mapFetchNowPlayingMoviesToState();
     }
   }
 

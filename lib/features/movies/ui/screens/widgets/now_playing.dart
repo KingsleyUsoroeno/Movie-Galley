@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/constant.dart';
-import 'package:movies/core/network_info.dart';
+import 'package:movies/core/utils.dart';
 import 'package:movies/features/movies/data/remote/model/Result.dart';
 import 'package:movies/features/movies/ui/screens/movies/movie_detail.dart';
-import 'package:transparent_image/transparent_image.dart';
-
-import '../../../../../injection_container.dart';
 
 class NowPlaying extends StatelessWidget {
   final Results nowPlayingResult;
@@ -22,7 +18,7 @@ class NowPlaying extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _buildImage(),
+            Utils.buildImage(nowPlayingResult),
             SizedBox(height: 10.0),
             Expanded(
               flex: 13,
@@ -45,35 +41,6 @@ class NowPlaying extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildImage() {
-    final networkInfo = injector<NetworkInfo>();
-    return FutureBuilder<bool>(
-      future: networkInfo.isConnected,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.data == true) {
-          return Expanded(
-            flex: 80,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15.0),
-              child: FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage, image: Constants.IMAGE_URL + nowPlayingResult.posterPath, fit: BoxFit.cover, width: 90),
-            ),
-          );
-        } else if (snapshot.data == false) {
-          return Expanded(
-            flex: 80,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15.0),
-              child:
-                  FadeInImage.assetNetwork(image: Constants.OFFLINE_IMAGE_URL, placeholder: Constants.OFFLINE_IMAGE_URL, fit: BoxFit.cover),
-            ),
-          );
-        }
-        return Container();
-      },
     );
   }
 }

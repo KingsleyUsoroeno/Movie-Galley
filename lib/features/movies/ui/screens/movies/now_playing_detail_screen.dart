@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/core/constant.dart';
+import 'package:movies/core/utils.dart';
 import 'package:movies/features/movies/data/bloc/movie/now_playing/bloc.dart';
 import 'package:movies/features/movies/data/remote/model/Result.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class NowPlayingDetailScreen extends StatefulWidget {
   final List<Results> movieResults;
@@ -25,7 +24,7 @@ class _NowPlayingDetailScreenState extends State<NowPlayingDetailScreen> {
           title: Text("Now Playing Movies", style: TextStyle(fontSize: 18.0, color: Colors.white)),
           backgroundColor: Theme.of(context).primaryColor,
           centerTitle: true),
-      body: BlocBuilder<NowPlayingMoviesBloc, NowPlayingMoviesState>(
+      body: BlocBuilder<NowPlayingMovieBloc, NowPlayingMoviesState>(
         builder: (context, NowPlayingMoviesState state) => _buildBody(state),
       ),
     );
@@ -34,17 +33,9 @@ class _NowPlayingDetailScreenState extends State<NowPlayingDetailScreen> {
   bool _onScrollNotification(NowPlayingMoviesState state, ScrollNotification notification) {
     if (notification is ScrollEndNotification && _scrollController.position.extentAfter == 0) {
       print("Called to load more was called");
-      context.bloc<NowPlayingMoviesBloc>().add(FetchMoreMovies(loadMore: true));
+      context.bloc<NowPlayingMovieBloc>().add(FetchMoreMovies(loadMore: true));
     }
     return false;
-  }
-
-  Widget _circularIndicator() {
-    return Center(
-      child: Center(
-        child: new CircularProgressIndicator(),
-      ),
-    );
   }
 
   Widget _buildBody(NowPlayingMoviesState state) {
@@ -76,13 +67,7 @@ class _NowPlayingDetailScreenState extends State<NowPlayingDetailScreen> {
                                   child: Text(movieResult.title,
                                       style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16.0))),
                             ),
-                            child: FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: movieResult.posterPath != null
-                                    ? Constants.IMAGE_URL + movieResult.posterPath
-                                    : Constants.DEFAULT_IMAGE_URL,
-                                fit: BoxFit.cover,
-                                width: 90),
+                            child: Utils.buildGridImage(movieResult),
                           ),
                         ),
                       ),

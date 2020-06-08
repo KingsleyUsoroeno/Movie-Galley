@@ -14,3 +14,5 @@ class FetchMoreMovies extends NowPlayingMoviesEvent {
 
   FetchMoreMovies({this.loadMore});
 }
+
+class RefreshNowPlayingMovies extends NowPlayingMoviesEvent {}

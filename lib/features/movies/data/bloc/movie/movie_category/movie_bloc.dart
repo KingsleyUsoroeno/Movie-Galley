@@ -27,6 +27,8 @@ class MovieBloc extends Bloc<MovieBlocEvent, MovieBlocState> {
   Stream<MovieBlocState> mapEventToState(MovieBlocEvent event) async* {
     if (event is FetchMovies) {
       yield* _mapFetchMoviesToState();
+    } else if (event is RefreshMovies) {
+      _mapFetchMoviesToState();
     }
   }
 
