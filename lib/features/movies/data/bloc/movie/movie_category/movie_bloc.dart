@@ -14,6 +14,7 @@ const String SERVER_FAILURE_MESSAGE = 'Server Failure';
 const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
 
 class MovieBloc extends Bloc<MovieBlocEvent, MovieBlocState> {
+  /*Event is what you put in , state is what you get back*/
   final MoviesRepository _movieRepository;
 
   MovieBloc({@required MoviesRepository appRepository})

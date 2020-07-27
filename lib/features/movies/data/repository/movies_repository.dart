@@ -3,6 +3,7 @@ import 'package:movies/core/error/failures.dart';
 import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
 import 'package:movies/features/movies/data/local/database/model/now_playing_movies_model.dart';
 import 'package:movies/features/movies/data/local/database/model/popular_movie_model.dart';
+import 'package:movies/features/movies/data/remote/model/movies.dart';
 
 /// Either is provided by the Dartz Package and supports functional programming in
 /// Dart and as seen below it will always either return a Failure object on the Left or a
@@ -15,4 +16,6 @@ abstract class MoviesRepository {
   Future<Either<Failure, NowPlayingMoviesDatabaseModel>> fetchAllNowPlayingMovies({bool loadMore = false});
 
   Future<Either<Failure, NowPlayingMoviesDatabaseModel>> fetchMoreNowPlayingMovies({bool loadMore = false});
+
+  Future<Either<Failure, Movies>> searchForMovie(String query, {bool loadMore = false});
 }

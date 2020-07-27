@@ -10,6 +10,7 @@ import 'package:movies/features/movies/data/bloc/movie/popular_movie/bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/popular_movie/popular_movie_bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/popular_movie/popular_movie_state.dart';
 import 'package:movies/features/movies/data/remote/model/Result.dart';
+import 'package:movies/features/movies/ui/screens/widgets/custom_search_delegate.dart';
 import 'package:movies/features/movies/ui/screens/widgets/now_playing.dart';
 
 import 'movies/now_playing_detail_screen.dart';
@@ -187,7 +188,12 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         // SEARCH VIEW
-                        SearchView(),
+                        SearchView(showSearchCallback: () {
+                          showSearch(
+                            context: context,
+                            delegate: CustomSearchDelegate(),
+                          );
+                        }),
                         SizedBox(height: 10.0),
                         Container(height: 130, child: _buildMovieCategory(context)),
                         SizedBox(height: 20.0),
