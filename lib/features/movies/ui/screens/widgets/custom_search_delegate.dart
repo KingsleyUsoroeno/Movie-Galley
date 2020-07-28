@@ -13,17 +13,20 @@ class CustomSearchDelegate extends SearchDelegate {
 
   final _suggestions = ["Fifty Shades of grey", "Boyka", "Spider Man", "Avengers", "Love me"];
 
-  /// Uncomment if you want to configure the App bar theme for these page*/
-  /*@override
+  @override
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
     final ThemeData theme = Theme.of(context);
     assert(theme != null);
     return theme.copyWith(
-        inputDecorationTheme: InputDecorationTheme(
-      hintStyle: Theme.of(context).textTheme.headline6.copyWith(color: Colors.white),
-    ));
-  }*/
+      primaryColor: Theme.of(context).primaryColor,
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.white),
+      primaryColorBrightness: Brightness.dark,
+      textTheme: theme.textTheme.copyWith(
+        headline6: TextStyle(fontWeight: FontWeight.normal, color: Colors.white),
+      ),
+    );
+  }
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -41,10 +44,9 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, null);
-      },
+      tooltip: 'Back',
+      icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+      onPressed: () => close(context, null),
     );
   }
 
@@ -60,6 +62,9 @@ class CustomSearchDelegate extends SearchDelegate {
           return _buildLoadingSpinner();
         } else if (state is MovieSearchLoaded) {
           final movie = state.movies;
+          if (movie.results.isEmpty) {
+            return _showErrorText("No Movie with that name Found");
+          }
           return Container(
             child: ListView.builder(
               itemCount: movie.results != null ? movie.results.length : 0,
@@ -75,7 +80,6 @@ class CustomSearchDelegate extends SearchDelegate {
           return Container();
       },
     );
-    return Container();
   }
 
   @override

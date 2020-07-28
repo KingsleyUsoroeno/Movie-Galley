@@ -1,9 +1,9 @@
 class Results {
-  double popularity;
-  int voteCount;
+  dynamic popularity;
+  dynamic voteCount;
   bool video;
   String posterPath;
-  int id;
+  dynamic id;
   bool adult;
   String backdropPath;
   String originalLanguage;

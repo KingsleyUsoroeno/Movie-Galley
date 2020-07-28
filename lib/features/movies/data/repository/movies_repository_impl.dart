@@ -148,8 +148,8 @@ class MoviesRepositoryImpl implements MoviesRepository {
       } else {
         return Left(ServerFailure(errorMessage: "Failed to fetch movie genre pls try again"));
       }
-    } catch (e) {
-      return Left(ServerFailure(errorMessage: e.toString()));
+    } on ServerException {
+      return Left(ServerFailure());
     }
   }
 }

@@ -66,12 +66,11 @@ class MovieApiServiceImpl extends MovieApiService {
         // If server returns an OK response, parse the JSON
         return NowPlayingResponse.fromJson(parsedJson);
       } else {
-        throw ServerException();
+        print("Caught an exception here due to ${response.statusCode} and ${response.body}");
+        return null;
       }
     } catch (e) {
-      if (e is SocketException) {
-        throw InternetException();
-      }
+      print("exception is ${e.toString()}");
       throw ServerException();
     }
   }
@@ -125,7 +124,7 @@ class MovieApiServiceImpl extends MovieApiService {
         print("movie query result is $parsedJson");
         return Movies.fromJson(parsedJson);
       } else {
-        throw ServerException();
+        return null;
       }
     } catch (e) {
       if (e is SocketException) {
