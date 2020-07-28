@@ -45,6 +45,7 @@ class NowPlayingMovieBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesSt
 
   Stream<NowPlayingMoviesState> _fetchMovies() async* {
     final failureOrMovie = await _repository.fetchAllNowPlayingMovies();
+    print("_fetchMovies threw an exception due to $failureOrMovie");
     yield* _eitherLoadedOrErrorState(failureOrMovie);
   }
 

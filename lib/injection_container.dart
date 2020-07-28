@@ -1,6 +1,7 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:movies/features/movies/data/bloc/movie/search_result_bloc/movie_search_bloc.dart';
 import 'package:movies/features/movies/data/datasource/movies_local_data_source.dart';
 import 'package:movies/features/movies/data/repository/movies_repository.dart';
 import 'package:movies/features/movies/data/repository/movies_repository_impl.dart';
@@ -22,6 +23,8 @@ Future<void> init() async {
   injector.registerFactory(() => NowPlayingMovieBloc(appRepository: injector.get()));
 
   injector.registerFactory(() => PopularMovieBloc(appRepository: injector.get()));
+
+  injector.registerFactory(() => MovieSearchBloc(appRepository: injector.get()));
 
   // Repository
   injector.registerLazySingleton<MoviesRepository>(

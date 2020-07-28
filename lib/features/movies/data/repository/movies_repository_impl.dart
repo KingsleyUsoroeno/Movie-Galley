@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:movies/core/error/exceptions.dart';
@@ -133,6 +135,21 @@ class MoviesRepositoryImpl implements MoviesRepository {
       } on CacheException {
         return Left(CacheFailure());
       }
+    }
+  }
+
+  @override
+  Future<Either<Failure, Movies>> searchForMovie(String query, {bool loadMore = false}) async {
+    try {
+      print("searching for movie and query is $query");
+      final movies = await remoteDataSource.searchForMovie(query, loadMore: loadMore);
+      if (movies != null) {
+        return Right(movies);
+      } else {
+        return Left(ServerFailure(errorMessage: "Failed to fetch movie genre pls try again"));
+      }
+    } on ServerException {
+      return Left(ServerFailure());
     }
   }
 }

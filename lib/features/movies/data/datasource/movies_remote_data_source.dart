@@ -10,6 +10,8 @@ abstract class MoviesRemoteDataSource {
   Future<NowPlayingResponse> getNowPlayingMovies({bool loadMore = false});
 
   Future<PopularMovie> getPopularMovies({bool loadMore = false});
+
+  Future<Movies> searchForMovie(String query, {bool loadMore = false});
 }
 
 class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
@@ -30,5 +32,10 @@ class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
   @override
   Future<PopularMovie> getPopularMovies({bool loadMore = false}) {
     return movieApiService.getPopularMovies(loadMore: loadMore);
+  }
+
+  @override
+  Future<Movies> searchForMovie(String query, {bool loadMore = false}) {
+    return movieApiService.searchForMovie(query, loadMore: loadMore);
   }
 }
