@@ -17,6 +17,12 @@ class MovieApiServiceImpl extends MovieApiService {
   int _perPopularMoviePage = 1;
   int _loadMoreSearchResult = 1;
 
+  int get perNowPlayingPage => _perNowPlayingPage;
+
+  int get perPopularMoviePage => _perPopularMoviePage;
+
+  int get loadMoreSearchResult => _loadMoreSearchResult;
+
   final http.Client client;
 
   MovieApiServiceImpl({@required this.client});
@@ -36,22 +42,6 @@ class MovieApiServiceImpl extends MovieApiService {
       // If that call was not successful, throw an error.
       throw Exception('Failed to load movies');
     }
-
-    // try {
-    //   final response = await client.get(url);
-    //   if (response.statusCode == 200) {
-    //     // If server returns an OK response, parse the JSON
-    //     print("movie category from server is $parsedJson");
-    //     return Movies.fromJson(parsedJson);
-    //   } else {
-    //     throw ServerException();
-    //   }
-    // } catch (e) {
-    //   if (e is SocketException) {
-    //     throw InternetException();
-    //   }
-    //   throw ServerException();
-    // }
   }
 
   @override
@@ -117,7 +107,7 @@ class MovieApiServiceImpl extends MovieApiService {
     print("Search for movie called");
     if (loadMore == true) {
       _loadMoreSearchResult += 1;
-      print("perPage value is $_loadMoreSearchResult");
+      print("perPage value of searchForMovie is $_loadMoreSearchResult");
     }
 
     try {
@@ -125,6 +115,7 @@ class MovieApiServiceImpl extends MovieApiService {
           Constants.BASE_URL + "3/search/movie?api_key=${Constants.API_KEY}&language=en-US&query=$query&page=$_loadMoreSearchResult&include_adult=true";
 
       final response = await client.get(queryUrl);
+
       if (response.statusCode == 200) {
         final parsedJson = await jsonDecode(response.body);
         // If server returns an OK response, parse the JSON
@@ -139,37 +130,5 @@ class MovieApiServiceImpl extends MovieApiService {
       }
       throw ServerException();
     }
-  }
-
-  Future<Movies> getMovieCategoriesTest(http.Client client) async {
-    ///**/ URL Called "http://api.themoviedb.org/3/discover/movie?api_key=98d4ab8983c3a5727df9ab4f565f5f4a";
-
-    final response = await client.get(Constants.BASE_URL + "3/discover/movie?api_key=${Constants.API_KEY}");
-
-    if (response.statusCode == 200) {
-      // If the call to the server was successful, parse the JSON and log it to the console.
-      final parsedJson = await jsonDecode(response.body);
-      debugPrint("movie category response is $parsedJson");
-      return Movies.fromJson(parsedJson);
-    } else {
-      // If that call was not successful, throw an error.
-      throw Exception('Failed to load movies');
-    }
-
-    // try {
-    //   final response = await client.get(url);
-    //   if (response.statusCode == 200) {
-    //     // If server returns an OK response, parse the JSON
-    //     print("movie category from server is $parsedJson");
-    //     return Movies.fromJson(parsedJson);
-    //   } else {
-    //     throw ServerException();
-    //   }
-    // } catch (e) {
-    //   if (e is SocketException) {
-    //     throw InternetException();
-    //   }
-    //   throw ServerException();
-    // }
   }
 }
