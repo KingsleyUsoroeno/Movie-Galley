@@ -21,12 +21,12 @@ typedef Future<NowPlayingResponse> _FetchNowPlayingMovies();
 typedef Future<PopularMovie> _FetchPopularMovies();
 typedef Future<NowPlayingResponse> _FetchMoreNowPlayingMovies();
 
-class MoviesRepositoryImpl implements MoviesRepository {
+class MovieRepositoryImpl implements MovieRepository {
   final MoviesRemoteDataSource remoteDataSource;
   final MoviesLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
-  MoviesRepositoryImpl({@required this.remoteDataSource, @required this.localDataSource, @required this.networkInfo});
+  MovieRepositoryImpl({@required this.remoteDataSource, @required this.localDataSource, @required this.networkInfo});
 
   @override
   Future<Either<Failure, MovieDatabaseModel>> fetchAllMovieCategories() async {

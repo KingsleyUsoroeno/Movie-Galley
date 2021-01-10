@@ -11,9 +11,9 @@ import 'movie_search_event.dart';
 import 'movie_search_state.dart';
 
 class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
-  final MoviesRepository _movieRepository;
+  final MovieRepository _movieRepository;
 
-  MovieSearchBloc({@required MoviesRepository appRepository})
+  MovieSearchBloc({@required MovieRepository appRepository})
       : assert(appRepository != null),
         _movieRepository = appRepository;
 
