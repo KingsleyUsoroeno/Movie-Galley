@@ -13,9 +13,9 @@ const String SERVER_FAILURE_MESSAGE = 'Server Failure';
 const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
 
 class NowPlayingMovieBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesState> {
-  final MoviesRepository _repository;
+  final MovieRepository _repository;
 
-  NowPlayingMovieBloc({@required MoviesRepository appRepository})
+  NowPlayingMovieBloc({@required MovieRepository appRepository})
       : assert(appRepository != null),
         _repository = appRepository;
 

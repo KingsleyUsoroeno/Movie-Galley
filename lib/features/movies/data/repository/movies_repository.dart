@@ -8,7 +8,7 @@ import 'package:movies/features/movies/data/remote/model/movies.dart';
 /// Either is provided by the Dartz Package and supports functional programming in
 /// Dart and as seen below it will always either return a Failure object on the Left or a
 /// response of our Model object on the right*/
-abstract class MoviesRepository {
+abstract class MovieRepository {
   Future<Either<Failure, MovieDatabaseModel>> fetchAllMovieCategories();
 
   Future<Either<Failure, PopularMoviesDatabaseModel>> fetchAllPopularMovies({bool loadMore = false});

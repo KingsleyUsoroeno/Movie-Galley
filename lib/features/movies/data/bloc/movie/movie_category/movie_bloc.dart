@@ -4,9 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:movies/core/error/failures.dart';
-import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
-import 'package:movies/features/movies/data/repository/movies_repository.dart';
 
+import '../../../local/database/model/movie_model.dart';
+import '../../../repository/movies_repository.dart';
 import 'movie_bloc_event.dart';
 import 'movie_bloc_state.dart';
 
@@ -15,11 +15,11 @@ const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
 
 class MovieBloc extends Bloc<MovieBlocEvent, MovieBlocState> {
   /*Event is what you put in , state is what you get back*/
-  final MoviesRepository _movieRepository;
+  final MovieRepository _movieRepository;
 
-  MovieBloc({@required MoviesRepository appRepository})
-      : assert(appRepository != null),
-        _movieRepository = appRepository;
+  MovieBloc({@required MovieRepository movieRepository})
+      : assert(movieRepository != null),
+        _movieRepository = movieRepository;
 
   @override
   MovieBlocState get initialState => InitialMovieBlocState();
