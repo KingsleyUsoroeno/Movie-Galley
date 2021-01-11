@@ -21,7 +21,7 @@ Future<void> init() async {
   //! Features - MovieBloc Bloc
   injector.registerFactory(() => MovieBloc(movieRepository: injector.get()));
 
-  injector.registerFactory(() => NowPlayingMovieBloc(appRepository: injector.get()));
+  injector.registerFactory(() => NowPlayingMovieBloc(movieRepository: injector.get()));
 
   injector.registerFactory(() => PopularMovieBloc(appRepository: injector.get()));
 

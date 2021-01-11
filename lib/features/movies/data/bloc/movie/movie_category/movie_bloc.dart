@@ -7,13 +7,13 @@ import 'package:movies/core/error/failures.dart';
 
 import '../../../local/database/model/movie_model.dart';
 import '../../../repository/movies_repository.dart';
-import 'movie_bloc_event.dart';
-import 'movie_bloc_state.dart';
+import 'movie_event.dart';
+import 'movie_state.dart';
 
 const String SERVER_FAILURE_MESSAGE = 'Server Failure';
 const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
 
-class MovieBloc extends Bloc<MovieBlocEvent, MovieBlocState> {
+class MovieBloc extends Bloc<MovieEvent, MovieState> {
   /*Event is what you put in , state is what you get back*/
   final MovieRepository _movieRepository;
 
@@ -22,10 +22,10 @@ class MovieBloc extends Bloc<MovieBlocEvent, MovieBlocState> {
         _movieRepository = movieRepository;
 
   @override
-  MovieBlocState get initialState => InitialMovieBlocState();
+  MovieState get initialState => InitialMovieState();
 
   @override
-  Stream<MovieBlocState> mapEventToState(MovieBlocEvent event) async* {
+  Stream<MovieState> mapEventToState(MovieEvent event) async* {
     if (event is FetchMovies) {
       yield* _mapFetchMoviesToState();
     } else if (event is RefreshMovies) {
@@ -33,12 +33,12 @@ class MovieBloc extends Bloc<MovieBlocEvent, MovieBlocState> {
     }
   }
 
-  Stream<MovieBlocState> _mapFetchMoviesToState() async* {
+  Stream<MovieState> _mapFetchMoviesToState() async* {
     yield MovieLoading();
     yield* _fetchMovies();
   }
 
-  Stream<MovieBlocState> _eitherLoadedOrErrorState(Either<Failure, MovieDatabaseModel> failureOrMovies) async* {
+  Stream<MovieState> _eitherLoadedOrErrorState(Either<Failure, MovieDatabaseModel> failureOrMovies) async* {
     yield failureOrMovies.fold(
       (failure) => MovieError(_mapFailureToMessage(failure)),
       (movie) => MovieLoaded(movie: movie),
@@ -56,12 +56,12 @@ class MovieBloc extends Bloc<MovieBlocEvent, MovieBlocState> {
     }
   }
 
-  Stream<MovieBlocState> _fetchMovies() async* {
+  Stream<MovieState> _fetchMovies() async* {
     final failureOrMovie = await _movieRepository.fetchAllMovieCategories();
     yield* _eitherLoadedOrErrorState(failureOrMovie);
   }
 
-  Stream<MovieBlocState> _fetchMoreMovies(bool loadMore) async* {
+  Stream<MovieState> _fetchMoreMovies(bool loadMore) async* {
     final failureOrMovie = await _movieRepository.fetchAllMovieCategories();
     yield* _eitherLoadedOrErrorState(failureOrMovie);
   }
