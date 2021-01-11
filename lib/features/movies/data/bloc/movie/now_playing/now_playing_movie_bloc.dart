@@ -13,11 +13,11 @@ const String SERVER_FAILURE_MESSAGE = 'Server Failure';
 const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
 
 class NowPlayingMovieBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesState> {
-  final MovieRepository _repository;
+  final MovieRepository _movieRepository;
 
-  NowPlayingMovieBloc({@required MovieRepository appRepository})
-      : assert(appRepository != null),
-        _repository = appRepository;
+  NowPlayingMovieBloc({@required MovieRepository movieRepository})
+      : assert(movieRepository != null),
+        _movieRepository = movieRepository;
 
   @override
   NowPlayingMoviesState get initialState => InitialNowPlayingMoviesState();
@@ -44,13 +44,13 @@ class NowPlayingMovieBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesSt
   }
 
   Stream<NowPlayingMoviesState> _fetchMovies() async* {
-    final failureOrMovie = await _repository.fetchAllNowPlayingMovies();
+    final failureOrMovie = await _movieRepository.fetchAllNowPlayingMovies();
     print("_fetchMovies threw an exception due to $failureOrMovie");
     yield* _eitherLoadedOrErrorState(failureOrMovie);
   }
 
   Stream<NowPlayingMoviesState> _fetchMoreMovies(bool loadMore) async* {
-    final failureOrMovie = await _repository.fetchMoreNowPlayingMovies(loadMore: loadMore);
+    final failureOrMovie = await _movieRepository.fetchMoreNowPlayingMovies(loadMore: loadMore);
     yield* _eitherLoadedOrErrorState(failureOrMovie);
   }
 

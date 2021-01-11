@@ -5,7 +5,7 @@ import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_m
 import 'package:movies/features/movies/data/bloc/movie/popular_movie/popular_movie_bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/search_result_bloc/bloc.dart';
 
-import 'features/movies/data/bloc/movie/movie_category/movie_bloc_event.dart';
+import 'features/movies/data/bloc/movie/movie_category/movie_event.dart';
 import 'features/movies/data/bloc/movie/now_playing/now_playing_movies_event.dart';
 import 'features/movies/data/bloc/movie/popular_movie/popular_movie_event.dart';
 import 'features/movies/ui/screens/home_screen.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/movie_category/bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/movie_category/movie_bloc.dart';
-import 'package:movies/features/movies/data/bloc/movie/movie_category/movie_bloc_state.dart';
+import 'package:movies/features/movies/data/bloc/movie/movie_category/movie_state.dart';
 import 'package:movies/features/movies/data/bloc/movie/now_playing/bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_movie_bloc.dart';
 import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_movies_state.dart';
@@ -21,8 +21,8 @@ import 'widgets/movie_category.dart';
 
 class HomeScreen extends StatelessWidget {
   Widget _buildMovieCategory(BuildContext context) {
-    return BlocBuilder<MovieBloc, MovieBlocState>(
-      builder: (BuildContext context, MovieBlocState state) {
+    return BlocBuilder<MovieBloc, MovieState>(
+      builder: (BuildContext context, MovieState state) {
         if (state is MovieLoading) {
           return _buildProgressIndicator();
         } else if (state is MovieLoaded) {
