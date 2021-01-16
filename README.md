@@ -4,11 +4,9 @@ A new Flutter application.
 
 ## Getting Started
 
-So i started my Flutter Adventure a little over a year ago and ever since then its been an amazing journey learning how to use these amazing framework to create cross-platfrom applications for both Android and IOS.
-While learning much about flutter, i ran into so many conversations regarding using a clean Architecture to modularise and build out a flutter project using a combination and following a wide variety of state management tools that flutter has to offer such as Bloc, Provider, Mobx etc.
-These movie App is highly inspired by resocoder Test Driven Development Architecture course which can be found [here](https://resocoder.com/category/tutorials/flutter/tdd-clean-architecture/)
-It Uses the Movie Db Api to fetch movies from its remote counterpart and saves it in a local database using the [Sqflite](https://pub.dev/packages/sqflite) Flutter plugin, while setting up these project i had no idea about [moor](https://pub.dev/packages/moor), which is a Room Like Database for flutter which i would higly recommend for my next project as well as upgrading the network package which is being used to another package such as [Dio](https://pub.dev/packages/dio).
-Anyways the App is split up into different packages and offeres functionalities such as lazy Loading list pagination, offline storage and Search Implemention using flutters search Delegate widget.
+Flutter Movies is a flutter application aimed to demonstrate some key principles of software development such as SOLID principles, Inversion of control and dependency injection.
+The App fetches movies from the Movie DB API and saves it in a local storage using the [Sqflite](https://pub.dev/packages/sqflite) plugin in flutter, which the UI observes , making it an offline first application.
+The app is split up into different packages and modules with different functionalities such as pagination, Get_It for dependey injection and Search using flutters search Delegate widget.
 
 ## Libraries used
 * Http read more about it [here](https://pub.dev/packages/http)
