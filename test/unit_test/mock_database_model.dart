@@ -1,15 +1,13 @@
-import 'package:movies/features/movies/data/local/database/model/movie_model.dart';
-import 'package:movies/features/movies/data/local/database/model/now_playing_movies_model.dart';
-import 'package:movies/features/movies/data/remote/model/Result.dart';
+import 'package:domain/imports/module_imports.dart';
+import 'package:domain/model/result.dart';
 
 class MockDatabaseModel {
-  static final movie = MovieDatabaseModel(
-    id: 1,
+  static final movie = Movie(
     page: 1,
     totalPages: 3,
     totalResults: 4,
     results: [
-      Results(
+      MovieResult(
         popularity: 5291.83,
         voteCount: 2,
         video: true,
@@ -27,12 +25,11 @@ class MockDatabaseModel {
     ],
   );
 
-  static final nowPlayingMovies = NowPlayingMoviesDatabaseModel(
-    id: 1,
+  static final nowPlayingMovies = NowPlayingMovie(
     totalPages: 3,
     totalResults: 4,
     results: [
-      Results(
+      MovieResult(
         popularity: 5291.83,
         voteCount: 2,
         video: true,
@@ -49,4 +46,6 @@ class MockDatabaseModel {
       )
     ],
   );
+
+  static final movieList = List.generate(10, (i) => movie);
 }

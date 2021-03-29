@@ -1,8 +1,11 @@
+import 'package:domain/model/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/core/bloc/now_playing/now_playing_movie_bloc.dart';
+import 'package:movies/core/bloc/now_playing/now_playing_movies_event.dart';
+import 'package:movies/core/bloc/now_playing/now_playing_movies_state.dart';
 import 'package:movies/core/utils.dart';
-import 'package:movies/features/movies/data/bloc/movie/now_playing/bloc.dart';
-import 'package:movies/features/movies/data/remote/model/Result.dart';
+import 'package:movies/injection_container.dart';
 
 class Body extends StatelessWidget {
   final _scrollController = ScrollController();
@@ -18,13 +21,18 @@ class Body extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   child: NotificationListener<ScrollNotification>(
-                    onNotification: (notification) => _onScrollNotification(context, state, notification),
+                    onNotification: (notification) =>
+                        _onScrollNotification(state, notification),
                     child: GridView.builder(
                       controller: _scrollController,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                      itemCount: state.nowPlayingMovies != null ? state.nowPlayingMovies.results.length : 0,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      itemCount: state.nowPlayingMovies != null
+                          ? state.nowPlayingMovies.results.length
+                          : 0,
                       itemBuilder: (BuildContext context, int index) {
-                        Results movieResult = state.nowPlayingMovies.results[index];
+                        MovieResult movieResult =
+                            state.nowPlayingMovies.results[index];
                         return Card(
                           child: Hero(
                             tag: movieResult.title,
@@ -36,7 +44,11 @@ class Body extends StatelessWidget {
                                   color: Colors.black26,
                                   child: Align(
                                       alignment: FractionalOffset.bottomCenter,
-                                      child: Text(movieResult.title, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16.0))),
+                                      child: Text(movieResult.title,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 16.0))),
                                 ),
                                 child: Utils.buildGridImage(movieResult),
                               ),
@@ -56,10 +68,12 @@ class Body extends StatelessWidget {
     );
   }
 
-  bool _onScrollNotification(BuildContext context, NowPlayingMoviesState state, ScrollNotification notification) {
-    if (notification is ScrollEndNotification && _scrollController.position.extentAfter == 0) {
+  bool _onScrollNotification(
+      NowPlayingMoviesState state, ScrollNotification notification) {
+    if (notification is ScrollEndNotification &&
+        _scrollController.position.extentAfter == 0) {
       print("Called to load more was called");
-      context.bloc<NowPlayingMovieBloc>().add(FetchMoreMovies(loadMore: true));
+      injector.get<NowPlayingMovieBloc>().add(FetchMoreMovies(loadMore: true));
     }
     return false;
   }

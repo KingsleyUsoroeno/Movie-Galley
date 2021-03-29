@@ -1,16 +1,14 @@
+import 'package:domain/model/result.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/features/movies/data/remote/model/Result.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-import '../injection_container.dart';
 import 'constant.dart';
-import 'network_info.dart';
 
 class Utils {
-  static Widget buildImage(Results movieResult) {
-    final networkInfo = injector<NetworkInfo>();
+  static Widget buildImage(MovieResult movieResult) {
+    //final networkInfo = injector<NetworkInfo>();
     return FutureBuilder<bool>(
-      future: networkInfo.isConnected,
+      future: Future.value(true),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data == true) {
           return Expanded(
@@ -19,7 +17,9 @@ class Utils {
               borderRadius: BorderRadius.circular(15.0),
               child: FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
-                  image: movieResult.posterPath != null ? Constants.IMAGE_URL + movieResult.posterPath : Constants.DEFAULT_IMAGE_URL,
+                  image: movieResult.posterPath != null
+                      ? Constants.IMAGE_URL + movieResult.posterPath
+                      : Constants.DEFAULT_IMAGE_URL,
                   fit: BoxFit.cover,
                   width: 90),
             ),
@@ -42,20 +42,25 @@ class Utils {
     );
   }
 
-  static Widget buildGridImage(Results movieResult) {
-    final networkInfo = injector<NetworkInfo>();
+  static Widget buildGridImage(MovieResult movieResult) {
+    //final networkInfo = injector<NetworkInfo>();
     return FutureBuilder<bool>(
-      future: networkInfo.isConnected,
+      future: Future.value(true),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data == true) {
           return FadeInImage.memoryNetwork(
               placeholder: kTransparentImage,
-              image: movieResult.posterPath != null ? Constants.IMAGE_URL + movieResult.posterPath : Constants.DEFAULT_IMAGE_URL,
+              image: movieResult.posterPath != null
+                  ? Constants.IMAGE_URL + movieResult.posterPath
+                  : Constants.DEFAULT_IMAGE_URL,
               fit: BoxFit.cover,
               width: 90);
         } else if (snapshot.data == false) {
           return FadeInImage.assetNetwork(
-              placeholder: Constants.OFFLINE_IMAGE_URL, image: Constants.OFFLINE_IMAGE_URL, fit: BoxFit.cover, width: 90);
+              placeholder: Constants.OFFLINE_IMAGE_URL,
+              image: Constants.OFFLINE_IMAGE_URL,
+              fit: BoxFit.cover,
+              width: 90);
         }
         return Center();
       },

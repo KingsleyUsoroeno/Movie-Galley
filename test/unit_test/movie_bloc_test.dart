@@ -1,65 +1,63 @@
 import 'package:dartz/dartz.dart';
+import 'package:domain/exception/failure.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:movies/core/error/failures.dart';
-import 'package:movies/features/movies/data/bloc/movie/movie_category/bloc.dart';
-import 'package:movies/features/movies/data/repository/movies_repository.dart';
+import 'package:movies/core/bloc/movie_category/movie_bloc.dart';
+import 'package:movies/core/bloc/movie_category/movie_event.dart';
+import 'package:movies/core/bloc/movie_category/movie_state.dart';
 
-import 'mock__movie_repository.dart';
+import 'mock__fetch_movie_usecase.dart';
 import 'mock_database_model.dart';
 
 void main() {
-  MovieRepository movieRepository;
+  MockFetchMovieUseCase fetchMovieUseCase;
   MovieBloc movieBloc;
 
   //setUp will get run before each test in the group to ensure that every test starts off in the exact same state.
   setUp(() {
-    movieRepository = MockMovieRepository();
-    movieBloc = MovieBloc(movieRepository: movieRepository);
+    fetchMovieUseCase = MockFetchMovieUseCase();
+    movieBloc = MovieBloc(fetchMovie: fetchMovieUseCase);
   });
 
   tearDown(() {
     movieBloc?.close();
   });
 
-  test('throws AssertionError if WeatherRepository is null', () {
+  test('throws AssertionError if MovieRepository is null', () {
     expect(
-      () => MovieBloc(movieRepository: null),
+      () => MovieBloc(fetchMovie: null),
       throwsA(isAssertionError),
     );
   });
 
-  test('initial state is correct', () {
-    expect(InitialMovieState(), movieBloc.initialState);
-  });
-
   group('FetchMovies Event', () {
-    test('initial state is correct', () {
-      expect(InitialMovieState(), movieBloc.initialState);
-    });
-
     test('emits [InitialMovieState, movieLoading, movieError] when FetchMovies is added and fetchAllMovieCategories fails', () {
-      when(movieRepository.fetchAllMovieCategories()).thenAnswer((_) async => Left(CacheFailure()));
+      when(fetchMovieUseCase.execute(any))
+          .thenAnswer((_) async => Left(CacheFailure()));
 
       // act
       movieBloc.add(FetchMovies());
 
       //assert
-      final expectedResponse = [InitialMovieState(), MovieLoading(), MovieError("Cache Failure")];
+      final expectedResponse = [MovieLoading(), MovieError("Cache Failure")];
 
       expectLater(movieBloc, emitsInOrder(expectedResponse));
     });
 
     test('emits [InitialMovieState,movieLoading, MovieLoaded] when FetchMovies is added and fetchAllMovieCategories succeeds', () async {
-      final movie = MockDatabaseModel.movie;
+      final movies = MockDatabaseModel.movieList;
 
-      when(movieRepository.fetchAllMovieCategories()).thenAnswer((_) async => Right(movie));
+      when(fetchMovieUseCase.execute(any))
+          .thenAnswer((_) async => Right(movies));
 
       // act
       movieBloc.add(FetchMovies());
 
       // assert
-      final expectedResponse = [InitialMovieState(), MovieLoading(), MovieLoaded(movie: movie)];
+      final expectedResponse = [
+        MovieLoading(),
+        MovieLoaded(movie: movies.first)
+      ];
 
       expectLater(
         movieBloc,
