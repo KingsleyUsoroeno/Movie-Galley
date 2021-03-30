@@ -13,9 +13,14 @@ abstract class MovieRepository {
   Future<Either<Failure, List<PopularMovie>>> getAllPopularMovies(
       {bool loadMore = false});
 
-  Future<Either<Failure, List<NowPlayingMovie>>> getAllNowPlayingMovies(
-      {bool loadMore = false});
+  Future<Either<Failure, List<NowPlayingMovie>>> getAllNowPlayingMovies({
+    bool loadMore = false,
+    int page,
+  });
 
-  Future<Either<Failure, Movie>> searchMovie(String query,
-      {bool loadMore = false});
+  Future<Either<Failure, Movie>> searchMovie(
+    int page,
+    String query, {
+    bool loadMore = false,
+  });
 }

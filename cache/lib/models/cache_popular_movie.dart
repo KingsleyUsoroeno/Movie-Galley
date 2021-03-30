@@ -17,15 +17,6 @@ class CachePopularMovie {
     this.results,
   });
 
-  // DATABASE HELPER FUNCTIONS
-  factory CachePopularMovie.fromJson(Map<String, dynamic> json) =>
-      CachePopularMovie(
-          id: json["id"],
-          page: json["page"],
-          totalResults: json["totalResults"],
-          totalPages: json["totalPages"],
-          results: movieResultsFromJson(json["movieResults"]));
-
   Map<String, dynamic> toJson() => {
         "id": id,
         "page": page,

@@ -19,16 +19,6 @@ class MovieRemoteImpl implements MovieRemote {
   final NowPlayingMovieRemoteMapper nowPlayingMovieMapper;
   final PopularMovieModelMapper popularMovieEntityMapper;
 
-  int _perNowPlayingPage = 1;
-  int _perPopularMoviePage = 1;
-  int _loadMoreSearchResult = 1;
-
-  int get perNowPlayingPage => _perNowPlayingPage;
-
-  int get perPopularMoviePage => _perPopularMoviePage;
-
-  int get loadMoreSearchResult => _loadMoreSearchResult;
-
   MovieRemoteImpl({
     @required this.httpClient,
     @required this.movieRemoteMapper,
@@ -50,32 +40,28 @@ class MovieRemoteImpl implements MovieRemote {
   }
 
   @override
-  Future<NowPlayingMovieEntity> fetchAllNowPlayingMovies(
-      {bool loadMore = false}) async {
+  Future<NowPlayingMovieEntity> fetchAllNowPlayingMovies({
+    int page = 1,
+    bool loadMore = false,
+  }) async {
     final String url = RemoteConstants.BASE_URL +
         "3/movie/now_playing?api_key=${RemoteConstants.API_KEY}"
-            "&language=en-US&page=$_perNowPlayingPage";
-    if (loadMore) {
-      _perNowPlayingPage += 1;
-    }
+            "&language=en-US&page=$page";
     return await SafeApiCall.makeNetworkRequest(
-      () => httpClient.get(Uri.parse(url)),
-      successResponse: (data) {
-        final response = NowPlayingMovieResponse.fromJson(data);
-        return nowPlayingMovieMapper.mapFromModel(response);
-      },
-    );
+        () => httpClient.get(Uri.parse(url)), successResponse: (data) {
+      final response = NowPlayingMovieResponse.fromJson(data);
+      return nowPlayingMovieMapper.mapFromModel(response);
+    });
   }
 
   @override
-  Future<PopularMovieEntity> fetchPopularMovies({bool loadMore = false}) async {
+  Future<PopularMovieEntity> fetchPopularMovies({
+    int page = 1,
+    bool loadMore = false,
+  }) async {
     final String url = RemoteConstants.BASE_URL +
         "3/movie/popular?api_key=${RemoteConstants.API_KEY}"
-            "&language=en-US&page=$_perPopularMoviePage";
-    if (loadMore) {
-      _perPopularMoviePage += 1;
-    }
-
+            "&language=en-US&page=$page";
     return await SafeApiCall.makeNetworkRequest(
       () => httpClient.get(Uri.parse(url)),
       successResponse: (json) {
@@ -86,13 +72,15 @@ class MovieRemoteImpl implements MovieRemote {
   }
 
   @override
-  Future<MovieEntity> searchForMovie(String query,
-      {bool loadMore = false}) async {
+  Future<MovieEntity> searchForMovie(
+    String query,
+    int page, {
+    bool loadMore = false,
+  }) async {
     final String queryUrl = RemoteConstants.BASE_URL +
         "3/search/movie?api_key=${RemoteConstants.API_KEY}"
             "&language=en-US&query=$query&page="
-            "$_loadMoreSearchResult&include_adult=true";
-
+            "$page&include_adult=true";
     return await SafeApiCall.makeNetworkRequest(
       () => httpClient.get(Uri.parse(queryUrl)),
       successResponse: (data) {

@@ -4,11 +4,13 @@ import 'package:data/contract/remote/movie_remote.dart';
 import 'package:data/mapper/movie_mapper.dart';
 import 'package:data/mapper/now_playing_movie_mapper.dart';
 import 'package:data/mapper/popular_movie_mapper.dart';
+import 'package:data/model/now_playing_movie_entity.dart';
 import 'package:domain/exception/failure.dart';
 import 'package:domain/model/movie.dart';
 import 'package:domain/model/now_playing_movie.dart';
 import 'package:domain/model/popular_movie.dart';
 import 'package:domain/repository/movie_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
 class MovieRepositoryImpl implements MovieRepository {
@@ -45,31 +47,21 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<NowPlayingMovie>>> getAllNowPlayingMovies(
-      {bool loadMore = false}) async {
+  Future<Either<Failure, List<NowPlayingMovie>>> getAllNowPlayingMovies({
+    bool loadMore = false,
+    int page = 1,
+  }) async {
     try {
       if (loadMore) {
-        print("fetching more now paying movies called");
-        final nowPlayingMovies = await movieRemote.fetchAllNowPlayingMovies();
-        print("nowPlayingMovies is $nowPlayingMovies ");
-        final savedMovies = await movieCache.getAllNowPlaying();
-        print("savedMovies is $savedMovies ");
-        savedMovies.first.results.addAll(nowPlayingMovies.results);
-        print("new savedMovies length is ${savedMovies.first.results.length}");
-        await movieCache.updateNowPlaying(savedMovies.first);
-        final movieToReturn = nowPlayingMovieMapper
-            .mapFromEntityList(await movieCache.getAllNowPlaying());
-        print("total movie sixze is ${movieToReturn.first.results.length}");
-        return Right(movieToReturn);
+        final movies = await loadMoreNowPlayingMovies();
+        return Right(nowPlayingMovieMapper.mapFromEntityList(movies));
       }
 
-      print("i didnt come here");
       final cachedMovie = await movieCache.getAllNowPlaying();
       if (cachedMovie != null && cachedMovie.isNotEmpty) {
         return Right(nowPlayingMovieMapper.mapFromEntityList(cachedMovie));
       } else {
-        final movie =
-            await movieRemote.fetchAllNowPlayingMovies(loadMore: loadMore);
+        final movie = await getNowPlayingMovies(1, false);
         await movieCache.saveNowPlaying(movie);
         final savedMovie = await movieCache.getAllNowPlaying();
         return Right(nowPlayingMovieMapper.mapFromEntityList(savedMovie));
@@ -101,11 +93,14 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, Movie>> searchMovie(String query,
-      {bool loadMore = false}) async {
+  Future<Either<Failure, Movie>> searchMovie(
+    int page,
+    String query, {
+    bool loadMore = false,
+  }) async {
     try {
       final searchedMovie =
-          await movieRemote.searchForMovie(query, loadMore: loadMore);
+          await movieRemote.searchForMovie(query, page, loadMore: loadMore);
       if (searchedMovie != null || searchedMovie.results.isNotEmpty) {
         return Right(movieMapper.mapFromEntity(searchedMovie));
       } else
@@ -115,5 +110,27 @@ class MovieRepositoryImpl implements MovieRepository {
       print(e.toString());
       return Left(ServerFailure(errorMessage: e.toString()));
     }
+  }
+
+  Future<NowPlayingMovieEntity> getNowPlayingMovies(int page, bool loadMore) {
+    return movieRemote.fetchAllNowPlayingMovies(
+      loadMore: loadMore,
+      page: page,
+    );
+  }
+
+  Future<List<NowPlayingMovieEntity>> loadMoreNowPlayingMovies() async {
+    final savedMovies = await movieCache.getAllNowPlaying();
+    final movie = savedMovies.first;
+    final int currentPage = movie.page += 1;
+    final movieResult = movie.results;
+
+    final movieResponse = await getNowPlayingMovies(currentPage, true);
+    movieResult.addAll(movieResponse.results);
+
+    movie.page = currentPage;
+    await movieCache.updateNowPlaying(movie);
+
+    return movieCache.getAllNowPlaying();
   }
 }

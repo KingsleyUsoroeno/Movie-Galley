@@ -1,14 +1,16 @@
 import 'package:domain/model/result.dart';
 import 'package:flutter/material.dart';
+import 'package:movies/core/utils/network_info.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import '../../injection_container.dart';
 import 'constant.dart';
 
 class Utils {
   static Widget buildImage(MovieResult movieResult) {
-    //final networkInfo = injector<NetworkInfo>();
+    final networkInfo = injector<NetworkInfo>();
     return FutureBuilder<bool>(
-      future: Future.value(true),
+      future: networkInfo.isConnected,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data == true) {
           return Expanded(
@@ -43,9 +45,9 @@ class Utils {
   }
 
   static Widget buildGridImage(MovieResult movieResult) {
-    //final networkInfo = injector<NetworkInfo>();
+    final networkInfo = injector<NetworkInfo>();
     return FutureBuilder<bool>(
-      future: Future.value(true),
+      future: networkInfo.isConnected,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data == true) {
           return FadeInImage.memoryNetwork(

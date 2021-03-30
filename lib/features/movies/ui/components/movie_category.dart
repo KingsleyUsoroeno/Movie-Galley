@@ -1,6 +1,6 @@
 import 'package:domain/model/result.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/core/constant.dart';
+import 'package:movies/core/utils/constant.dart';
 import 'package:movies/features/movies/ui/screens/movies/movie_detail.dart';
 
 class MovieCategory extends StatelessWidget {

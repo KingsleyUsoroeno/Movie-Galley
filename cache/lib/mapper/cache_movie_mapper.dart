@@ -6,6 +6,7 @@ class CacheMovieMapper extends CacheModelMapper<CacheMovieModel, MovieEntity> {
   @override
   MovieEntity mapToEntity(CacheMovieModel model) {
     return MovieEntity(
+      id: model.id,
       page: model.page,
       totalPages: model.totalPages,
       totalResults: model.totalResults,
@@ -31,6 +32,7 @@ class CacheMovieMapper extends CacheModelMapper<CacheMovieModel, MovieEntity> {
   @override
   CacheMovieModel mapToModel(MovieEntity entity) {
     return CacheMovieModel(
+        id: entity.id,
         page: entity.page,
         totalPages: entity.totalPages,
         totalResults: entity.totalResults,

@@ -7,6 +7,7 @@ class CachePopularMovieMapper
   @override
   PopularMovieEntity mapToEntity(CachePopularMovie model) {
     return PopularMovieEntity(
+      id: model.id,
       totalPages: model.totalPages,
       totalResults: model.totalResults,
       results: model.results
@@ -31,6 +32,7 @@ class CachePopularMovieMapper
   @override
   CachePopularMovie mapToModel(PopularMovieEntity entity) {
     return CachePopularMovie(
+        id: entity.id,
         totalPages: entity.totalPages,
         totalResults: entity.totalResults,
         results: entity.results

@@ -1,22 +1,19 @@
 import 'result_entity.dart';
 
 class MovieEntity {
+  int id;
   int page;
   int totalResults;
   int totalPages;
   List<ResultEntity> results;
 
   MovieEntity({
-    int page,
-    int totalResults,
-    int totalPages,
-    List<ResultEntity> results,
-  }) {
-    this.page = page;
-    this.totalResults = totalResults;
-    this.totalPages = totalPages;
-    this.results = results;
-  }
+    this.id,
+    this.page,
+    this.totalResults,
+    this.totalPages,
+    this.results,
+  });
 
   @override
   String toString() {

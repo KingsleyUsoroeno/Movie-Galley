@@ -9,8 +9,9 @@ abstract class MovieSearchEvent extends Equatable {
 
 class SearchMovies extends MovieSearchEvent {
   final String movieQuery;
+  final int page;
 
-  SearchMovies({this.movieQuery});
+  SearchMovies({this.page, this.movieQuery});
 }
 
 class FetchMoreMovieForSearchQuery extends MovieSearchEvent {

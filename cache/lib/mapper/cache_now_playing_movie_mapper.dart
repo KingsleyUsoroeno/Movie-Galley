@@ -8,6 +8,7 @@ class CacheNowPlayingMovieMapper
   NowPlayingMovieEntity mapToEntity(CacheNowPlayingMovie model) {
     return NowPlayingMovieEntity(
       id: model.id,
+      page: model.page,
       totalPages: model.totalPages,
       totalResults: model.totalResults,
       results: model.results
@@ -33,6 +34,7 @@ class CacheNowPlayingMovieMapper
   CacheNowPlayingMovie mapToModel(NowPlayingMovieEntity entity) {
     return CacheNowPlayingMovie(
         id: entity.id,
+        page: entity.page,
         totalPages: entity.totalPages,
         totalResults: entity.totalResults,
         results: entity.results

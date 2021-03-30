@@ -12,6 +12,7 @@ class SearchMovie extends EitherUseCase<SearchMovieParams, Movie> {
   @override
   Future<Either<Failure, Movie>> execute(SearchMovieParams params) async {
     return await movieRepository.searchMovie(
+      params.page,
       params.query,
       loadMore: params.loadMore,
     );
@@ -21,6 +22,7 @@ class SearchMovie extends EitherUseCase<SearchMovieParams, Movie> {
 class SearchMovieParams {
   final String query;
   final bool loadMore;
+  final int page;
 
-  SearchMovieParams({this.query, this.loadMore});
+  SearchMovieParams({this.query, this.loadMore, this.page});
 }

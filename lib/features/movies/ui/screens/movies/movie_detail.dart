@@ -1,6 +1,6 @@
 import 'package:domain/model/result.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/core/constant.dart';
+import 'package:movies/core/utils/constant.dart';
 
 const boldTextStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
 

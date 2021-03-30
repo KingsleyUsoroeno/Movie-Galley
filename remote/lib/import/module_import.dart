@@ -1,9 +1,0 @@
-// export 'package:data/src/model/movie_entity.dart';
-// export 'package:data/src/model/now_playing_movie_entity.dart';
-// export 'package:data/src/model/result_entity.dart';
-// export 'package:data/src/model/popular_movie_entity.dart';
-// export 'package:remote/helper/remote_constants.dart';
-// export 'package:remote/helper/safeApiCall.dart';
-// export 'package:remote/models/response/movie_response.dart';
-// export 'package:remote/mapper/movie_remote_mapper.dart';
-// export 'package:data/contract/remote/movie_remote.dart';

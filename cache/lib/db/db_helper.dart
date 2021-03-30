@@ -153,6 +153,7 @@ class DatabaseHelper {
     return List.generate(maps.length, (i) {
       return CacheNowPlayingMovie(
         id: maps[i]['id'],
+        page: maps[i]['page'],
         totalResults: maps[i]['totalResults'],
         totalPages: maps[i]["totalPages"],
         results: movieResultsFromJson(maps[i]["movieResults"]),

@@ -1,6 +1,6 @@
 import 'package:domain/model/result.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/core/utils.dart';
+import 'package:movies/core/utils/utils.dart';
 import 'package:movies/features/movies/ui/screens/movies/movie_detail.dart';
 
 class NowPlaying extends StatelessWidget {

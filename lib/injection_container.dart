@@ -9,6 +9,7 @@ import 'package:data/mapper/movie_mapper.dart';
 import 'package:data/mapper/now_playing_movie_mapper.dart';
 import 'package:data/mapper/popular_movie_mapper.dart';
 import 'package:data/repository/movie_repository_impl.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:domain/repository/movie_repository.dart';
 import 'package:domain/usecase/movies/fetch_movie.dart';
 import 'package:domain/usecase/movies/fetch_now_playing.dart';
@@ -18,6 +19,7 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:movies/core/bloc/movie_category/bloc.dart';
 import 'package:movies/core/bloc/popular_movie/popular_movie_bloc.dart';
+import 'package:movies/core/utils/network_info.dart';
 import 'package:remote/mapper/movie_remote_mapper.dart';
 import 'package:remote/mapper/now_playing_movie_remote_mapper.dart';
 import 'package:remote/mapper/popular_movie_model_mapper.dart';
@@ -59,7 +61,7 @@ Future<void> init() async {
   );
 
   injector.registerLazySingleton<MovieCache>(
-        () => MovieCacheImpl(
+    () => MovieCacheImpl(
         databaseHelper: injector.get(),
         cacheMovieMapper: CacheMovieMapper(),
         nowPlayingMovieMapper: CacheNowPlayingMovieMapper(),
@@ -68,7 +70,7 @@ Future<void> init() async {
 
   // injecting our MovieRemote
   injector.registerLazySingleton<MovieRemote>(
-        () => MovieRemoteImpl(
+    () => MovieRemoteImpl(
         httpClient: http.Client(),
         movieRemoteMapper: MovieRemoteMapper(),
         nowPlayingMovieMapper: NowPlayingMovieRemoteMapper(),
@@ -86,4 +88,9 @@ Future<void> init() async {
 
   injector.registerFactory(
       () => FetchPopularMovie(movieRepository: injector.get()));
+
+  injector
+      .registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(injector()));
+
+  injector.registerLazySingleton(() => DataConnectionChecker());
 }

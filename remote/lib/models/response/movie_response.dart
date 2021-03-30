@@ -7,16 +7,11 @@ class MovieResponse {
   List<MovieResult> results;
 
   MovieResponse({
-    int page,
-    int totalResults,
-    int totalPages,
-    List<MovieResult> results,
-  }) {
-    this.page = page;
-    this.totalResults = totalResults;
-    this.totalPages = totalPages;
-    this.results = results;
-  }
+    this.page,
+    this.totalResults,
+    this.totalPages,
+    this.results,
+  });
 
   MovieResponse.fromJson(Map<String, dynamic> json) {
     page = json['page'];
@@ -25,7 +20,7 @@ class MovieResponse {
     if (json['results'] != null) {
       results = [];
       json['results'].forEach((v) {
-        results.add(new MovieResult.fromJson(v));
+        results.add(MovieResult.fromJson(v));
       });
     }
   }

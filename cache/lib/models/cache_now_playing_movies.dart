@@ -13,6 +13,7 @@ CacheDateModel datesFromJson(String str) =>
 
 class CacheNowPlayingMovie {
   int id;
+  int page;
   int totalResults;
   int totalPages;
   CacheDateModel dates;
@@ -24,19 +25,13 @@ class CacheNowPlayingMovie {
     this.totalPages,
     this.dates,
     this.results,
+    this.page,
   });
 
-  // DATABASE HELPER FUNCTIONS
-  factory CacheNowPlayingMovie.fromJson(Map<String, dynamic> json) =>
-      CacheNowPlayingMovie(
-          id: json["id"],
-          totalResults: json["totalResults"],
-          totalPages: json["totalPages"],
-          dates: datesFromJson(json["dates"]),
-          results: movieResultsFromJson(json["movieResults"]));
-
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "id": id,
+        "page": page,
         "totalResults": totalResults,
         "totalPages": totalPages,
         "dates": datesToJson(dates),

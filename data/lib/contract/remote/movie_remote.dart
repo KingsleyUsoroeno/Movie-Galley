@@ -5,10 +5,12 @@ import 'package:data/model/popular_movie_entity.dart';
 abstract class MovieRemote {
   Future<MovieEntity> fetchAllMovieCategories();
 
-  Future<PopularMovieEntity> fetchPopularMovies({bool loadMore = false});
+  Future<PopularMovieEntity> fetchPopularMovies(
+      {int page, bool loadMore = false});
 
   Future<NowPlayingMovieEntity> fetchAllNowPlayingMovies(
-      {bool loadMore = false});
+      {int page, bool loadMore = false});
 
-  Future<MovieEntity> searchForMovie(String query, {bool loadMore = false});
+  Future<MovieEntity> searchForMovie(String query, int page,
+      {bool loadMore = false});
 }

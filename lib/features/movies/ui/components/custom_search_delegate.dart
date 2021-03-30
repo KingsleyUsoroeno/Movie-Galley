@@ -63,7 +63,7 @@ class CustomSearchDelegate extends SearchDelegate {
     // Show Search Results here
     print("inside custom search delegate and search query is $query");
     BlocProvider.of<MovieSearchBloc>(context, listen: false)
-      ..add(SearchMovies(movieQuery: query));
+      ..add(SearchMovies(movieQuery: query, page: 1));
 
     return BlocBuilder<MovieSearchBloc, MovieSearchState>(
       builder: (BuildContext context, MovieSearchState state) {

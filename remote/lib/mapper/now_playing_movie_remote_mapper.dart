@@ -12,7 +12,9 @@ class NowPlayingMovieRemoteMapper
       page: model.page,
       totalResults: model.totalResults,
       dates: DateEntity(
-          maximum: model.dates.maximum, minimum: model.dates.minimum),
+        maximum: model.dates.maximum,
+        minimum: model.dates.minimum,
+      ),
       results: model.results != null
           ? model.results
               .map(
