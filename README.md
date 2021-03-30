@@ -14,18 +14,20 @@ Resources Used:
 [Repo](https://github.com/Vanethos/flutter_modular_app/tree/feature/modular_approach)
 
 ## Features
-* Clean Architecture with Bloc (State management library with flutter)
+* Clean Architecture
+* Bloc and Flutter_Bloc (State management library for flutter)
 * Dartz(Functional programming in dart)
-* SqFlite(for offline caching)
-* Get It for dependency injection
+* Dependency injection
 * GitHub actions for CI
+* Pagination
+* Offline Caching
 
 ## Libraries
 * [Http](https://pub.dev/packages/http) Used for making network request to our MovieDb API
 * [Sqflite](https://pub.dev/packages/sqflite) Used for caching network response locally for offline viewing 
-* [Bloc](https://pub.dev/packages/flutter_bloc) state management solution with a UniDirectional flow approach
-* [GetIt](https://pub.dev/packages/flutter_bloc) used for dependency injection
-* [Dartz](https://pub.dev/packages/flutter_bloc) Introduces the concept of functional programming in dart
+* [Bloc](https://pub.dev/packages/flutter_bloc) State management solution with a Uni-directional data flow approach
+* [GetIt](https://pub.dev/packages/flutter_bloc) Used for dependency injection
+* [Dartz](https://pub.dev/packages/flutter_bloc) Functional programming in dart
 * [Mockito](https://pub.dev/packages/flutter_bloc) Used for creating mock classes when needed across different test suites
 
 ## Screenshots
