@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/features/movies/data/bloc/movie/movie_category/movie_bloc.dart';
-import 'package:movies/features/movies/data/bloc/movie/now_playing/now_playing_movie_bloc.dart';
-import 'package:movies/features/movies/data/bloc/movie/popular_movie/popular_movie_bloc.dart';
-import 'package:movies/features/movies/data/bloc/movie/search_result_bloc/bloc.dart';
 
-import 'features/movies/data/bloc/movie/movie_category/movie_event.dart';
-import 'features/movies/data/bloc/movie/now_playing/now_playing_movies_event.dart';
-import 'features/movies/data/bloc/movie/popular_movie/popular_movie_event.dart';
-import 'features/movies/ui/screens/home_screen.dart';
+import 'core/bloc/movie_category/movie_bloc.dart';
+import 'core/bloc/movie_category/movie_event.dart';
+import 'core/bloc/now_playing/now_playing_movie_bloc.dart';
+import 'core/bloc/now_playing/now_playing_movies_event.dart';
+import 'core/bloc/popular_movie/popular_movie_bloc.dart';
+import 'core/bloc/popular_movie/popular_movie_event.dart';
+import 'core/bloc/search_result_bloc/movie_search_bloc.dart';
+import 'features/movies/ui/screens/home/home_screen.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
@@ -26,12 +26,15 @@ class MyApp extends StatelessWidget {
           create: (_) => di.injector<MovieBloc>()..add(FetchMovies()),
         ),
         BlocProvider<NowPlayingMovieBloc>(
-          create: (_) => di.injector<NowPlayingMovieBloc>()..add(FetchNowPlayingMovies()),
+          create: (_) =>
+              di.injector<NowPlayingMovieBloc>()..add(FetchNowPlayingMovies()),
         ),
         BlocProvider<PopularMovieBloc>(
-          create: (BuildContext context) => di.injector<PopularMovieBloc>()..add(FetchPopularMovies()),
+          create: (_) =>
+              di.injector<PopularMovieBloc>()..add(FetchPopularMovies()),
         ),
-        BlocProvider<MovieSearchBloc>(create: (_) => di.injector<MovieSearchBloc>())
+        BlocProvider<MovieSearchBloc>(
+            create: (_) => di.injector<MovieSearchBloc>())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

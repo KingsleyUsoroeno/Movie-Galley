@@ -1,20 +1,32 @@
-# movies
 
-A new Flutter application.
+# Movie Gallery.
 
-## Getting Started
+<h3 align="center">Please help this repo with a :star: if you find it useful! :blush:</h3>
 
-Flutter Movies is a flutter application aimed to demonstrate some key principles of software development such as SOLID principles, Inversion of control and dependency injection.
-The App fetches movies from the Movie DB API and saves it in a local storage using the [Sqflite](https://pub.dev/packages/sqflite) plugin in flutter, which the UI observes , making it an offline first application.
-The app is split up into different packages and modules with different functionalities such as pagination, Get_It for dependey injection and Search using flutters search Delegate widget.
+Hey there 👋🏼👋🏼👋🏼
 
-## Libraries used
-* Http read more about it [here](https://pub.dev/packages/http)
-* Sqflite read more about it [here](https://pub.dev/packages/sqflite)
-* Bloc for state management read more [here](https://pub.dev/packages/flutter_bloc)
-* Dependency injection using the Get_it library
-* and lots more
+This project tries to follow the principles of clean architecture in flutter by introducing the 
+concept of modularisation the idea was sparked after learning more about the benefits of 
+clean architecture and modularisation from a native android perspective and from the resource linked below.
 
+Resources Used: 
+[Blog](https://medium.com/flutter-community/modular-flutter-apps-design-and-considerations-59c5ac65352),
+[Repo](https://github.com/Vanethos/flutter_modular_app/tree/feature/modular_approach)
+
+## Features
+* Clean Architecture with Bloc (State management library with flutter)
+* Dartz(Functional programming in dart)
+* SqFlite(for offline caching)
+* Get It for dependency injection
+* GitHub actions for CI
+
+## Libraries
+* [Http](https://pub.dev/packages/http) Used for making network request to our MovieDb API
+* [Sqflite](https://pub.dev/packages/sqflite) Used for caching network response locally for offline viewing 
+* [Bloc](https://pub.dev/packages/flutter_bloc) state management solution with a UniDirectional flow approach
+* [GetIt](https://pub.dev/packages/flutter_bloc) used for dependency injection
+* [Dartz](https://pub.dev/packages/flutter_bloc) Introduces the concept of functional programming in dart
+* [Mockito](https://pub.dev/packages/flutter_bloc) Used for creating mock classes when needed across different test suites
 
 ## Screenshots
 <p float="left">
