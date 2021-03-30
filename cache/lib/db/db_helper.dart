@@ -124,7 +124,7 @@ class DatabaseHelper {
 
   Future deleteAllNowPlaying() async {
     final db = await database;
-    return await db.delete('DELETE FROM $nowPlaying');
+    return await db.rawDelete('DELETE FROM $nowPlaying');
   }
 
   Future deleteAllPopularMovies() async {

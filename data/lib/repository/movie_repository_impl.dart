@@ -9,6 +9,7 @@ import 'package:domain/model/movie.dart';
 import 'package:domain/model/now_playing_movie.dart';
 import 'package:domain/model/popular_movie.dart';
 import 'package:domain/repository/movie_repository.dart';
+import 'package:meta/meta.dart';
 
 class MovieRepositoryImpl implements MovieRepository {
   final MovieRemote movieRemote;
@@ -17,18 +18,19 @@ class MovieRepositoryImpl implements MovieRepository {
   final NowPlayingMovieMapper nowPlayingMovieMapper;
   final PopularMovieEntityMapper popularMovieEntityMapper;
 
-  MovieRepositoryImpl(
-      {this.movieRemote,
-      this.movieCache,
-      this.movieMapper,
-      this.nowPlayingMovieMapper,
-      this.popularMovieEntityMapper});
+  MovieRepositoryImpl({
+    @required this.movieRemote,
+    @required this.movieCache,
+    @required this.movieMapper,
+    @required this.nowPlayingMovieMapper,
+    @required this.popularMovieEntityMapper,
+  });
 
   @override
   Future<Either<Failure, List<Movie>>> getAllMovieCategories() async {
     try {
       final cacheMovie = await movieCache.getAllMovies();
-      if (cacheMovie != null && cacheMovie.first.results.isNotEmpty) {
+      if (cacheMovie != null && cacheMovie.isNotEmpty) {
         return Right(movieMapper.mapFromEntityList(cacheMovie));
       } else {
         final movie = await movieRemote.fetchAllMovieCategories();
@@ -46,8 +48,24 @@ class MovieRepositoryImpl implements MovieRepository {
   Future<Either<Failure, List<NowPlayingMovie>>> getAllNowPlayingMovies(
       {bool loadMore = false}) async {
     try {
+      if (loadMore) {
+        print("fetching more now paying movies called");
+        final nowPlayingMovies = await movieRemote.fetchAllNowPlayingMovies();
+        print("nowPlayingMovies is $nowPlayingMovies ");
+        final savedMovies = await movieCache.getAllNowPlaying();
+        print("savedMovies is $savedMovies ");
+        savedMovies.first.results.addAll(nowPlayingMovies.results);
+        print("new savedMovies length is ${savedMovies.first.results.length}");
+        await movieCache.updateNowPlaying(savedMovies.first);
+        final movieToReturn = nowPlayingMovieMapper
+            .mapFromEntityList(await movieCache.getAllNowPlaying());
+        print("total movie sixze is ${movieToReturn.first.results.length}");
+        return Right(movieToReturn);
+      }
+
+      print("i didnt come here");
       final cachedMovie = await movieCache.getAllNowPlaying();
-      if (cachedMovie != null && cachedMovie.first.results.isNotEmpty) {
+      if (cachedMovie != null && cachedMovie.isNotEmpty) {
         return Right(nowPlayingMovieMapper.mapFromEntityList(cachedMovie));
       } else {
         final movie =
@@ -66,9 +84,10 @@ class MovieRepositoryImpl implements MovieRepository {
   Future<Either<Failure, List<PopularMovie>>> getAllPopularMovies(
       {bool loadMore = false}) async {
     try {
-      final cachedMovie = await movieCache.getAllPopularMovies();
-      if (cachedMovie != null && cachedMovie.first.results.isNotEmpty) {
-        return Right(popularMovieEntityMapper.mapFromEntityList(cachedMovie));
+      final cachedPopularMovies = await movieCache.getAllPopularMovies();
+      if (cachedPopularMovies != null && cachedPopularMovies.isNotEmpty) {
+        return Right(
+            popularMovieEntityMapper.mapFromEntityList(cachedPopularMovies));
       } else {
         final movie = await movieRemote.fetchPopularMovies(loadMore: loadMore);
         await movieCache.savePopularMovies(movie);
@@ -87,7 +106,6 @@ class MovieRepositoryImpl implements MovieRepository {
     try {
       final searchedMovie =
           await movieRemote.searchForMovie(query, loadMore: loadMore);
-      print("searched is $searchedMovie");
       if (searchedMovie != null || searchedMovie.results.isNotEmpty) {
         return Right(movieMapper.mapFromEntity(searchedMovie));
       } else

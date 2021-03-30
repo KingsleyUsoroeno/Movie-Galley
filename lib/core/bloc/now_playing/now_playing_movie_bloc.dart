@@ -59,7 +59,10 @@ class NowPlayingMovieBloc
       Either<Failure, List<NowPlayingMovie>> failureOrMovies) async* {
     yield failureOrMovies.fold(
       (failure) => NowPlayingMovieError(errorMessage: failure.toString()),
-      (movie) => NowPlayingMovieLoaded(nowPlayingMovies: movie.first),
+      (movie) {
+        print("bloc list is ${movie.first.results.length}");
+        return NowPlayingMovieLoaded(nowPlayingMovies: movie.first);
+      },
     );
   }
 }

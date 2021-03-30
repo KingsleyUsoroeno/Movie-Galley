@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/core/bloc/now_playing/now_playing_movie_bloc.dart';
 import 'package:movies/core/bloc/now_playing/now_playing_movies_state.dart';
 import 'package:movies/features/movies/ui/components/now_playing.dart';
-import 'package:movies/features/movies/ui/screens/movies/now_playing_detail_screen.dart';
+
+import 'now_playing_detail_screen.dart';
 
 class NowPlayingMovieCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NowPlayingMovieBloc, NowPlayingMoviesState>(
+      bloc: BlocProvider.of<NowPlayingMovieBloc>(context),
       builder: (context, NowPlayingMoviesState state) {
         if (state is NowPlayingMovieLoading) {
           return Center(child: CircularProgressIndicator());
@@ -21,15 +23,30 @@ class NowPlayingMovieCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Now Playing',
-                      style: TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.w600)),
+                  Text(
+                    'Now Playing',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   GestureDetector(
-                      child: Text('View more',
-                          style: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.w400)),
-                      onTap: () => _navigateToNowPlayingDetailScreen(
-                          context, state.nowPlayingMovies.results)),
+                    child: Text(
+                      'View more',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => NowPlayingDetailScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
               SizedBox(height: 8.0),
@@ -62,15 +79,5 @@ class NowPlayingMovieCard extends StatelessWidget {
           return Container();
       },
     );
-  }
-
-  void _navigateToNowPlayingDetailScreen(
-      BuildContext context, List<MovieResult> movies) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => BlocProvider.value(
-        value: BlocProvider.of<NowPlayingMovieBloc>(context),
-        child: NowPlayingDetailScreen(),
-      ),
-    ));
   }
 }

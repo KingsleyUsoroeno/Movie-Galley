@@ -1,20 +1,24 @@
 import 'package:cache/db/db_helper.dart';
 import 'package:cache/mapper/cache_movie_mapper.dart';
 import 'package:cache/mapper/cache_now_playing_movie_mapper.dart';
+import 'package:cache/mapper/cache_popular_movie_mapper.dart';
 import 'package:data/contract/cache/movie_cache.dart';
 import 'package:data/model/movie_entity.dart';
 import 'package:data/model/now_playing_movie_entity.dart';
 import 'package:data/model/popular_movie_entity.dart';
+import 'package:meta/meta.dart';
 
 class MovieCacheImpl implements MovieCache {
   final DatabaseHelper databaseHelper;
   final CacheMovieMapper cacheMovieMapper;
   final CacheNowPlayingMovieMapper nowPlayingMovieMapper;
+  final CachePopularMovieMapper popularMovieMapper;
 
   MovieCacheImpl({
-    this.databaseHelper,
-    this.cacheMovieMapper,
-    this.nowPlayingMovieMapper,
+    @required this.databaseHelper,
+    @required this.cacheMovieMapper,
+    @required this.nowPlayingMovieMapper,
+    @required this.popularMovieMapper,
   });
 
   @override
@@ -35,29 +39,23 @@ class MovieCacheImpl implements MovieCache {
   @override
   Future<List<MovieEntity>> getAllMovies() async {
     final cachedMovies = await databaseHelper.getAllMovies();
-    if (cachedMovies != null && cachedMovies.isNotEmpty) {
-      return cachedMovies.map((e) => cacheMovieMapper.mapToEntity(e)).toList();
-    }
-    return [];
+    return cacheMovieMapper.mapToEntityList(cachedMovies);
   }
 
   @override
   Future<List<NowPlayingMovieEntity>> getAllNowPlaying() async {
     final cachedNowPlayingMovie = await databaseHelper.getAllNowPlaying();
-    return cachedNowPlayingMovie
-        .map((e) => nowPlayingMovieMapper.mapToEntity(e))
-        .toList();
+    return nowPlayingMovieMapper.mapToEntityList(cachedNowPlayingMovie);
   }
 
   @override
-  Future<List<PopularMovieEntity>> getAllPopularMovies() {
-    // TODO: implement getAllPopularMovies
-    throw UnimplementedError();
+  Future<List<PopularMovieEntity>> getAllPopularMovies() async {
+    final popularMovies = await databaseHelper.getAllPopularMovies();
+    return popularMovieMapper.mapToEntityList(popularMovies);
   }
 
   @override
   Future<int> saveMovie(MovieEntity movie) {
-    print("saved movie is $movie");
     return databaseHelper.saveMovie(cacheMovieMapper.mapToModel(movie));
   }
 
@@ -69,8 +67,8 @@ class MovieCacheImpl implements MovieCache {
 
   @override
   Future<int> savePopularMovies(PopularMovieEntity popularMovies) {
-    // TODO: implement savePopularMovies
-    throw UnimplementedError();
+    return databaseHelper
+        .savePopularMovies(popularMovieMapper.mapToModel(popularMovies));
   }
 
   @override
@@ -85,8 +83,8 @@ class MovieCacheImpl implements MovieCache {
   }
 
   @override
-  Future<int> updatePopularMovies(PopularMovieEntity nowPlaying) {
-    // TODO: implement updatePopularMovies
-    throw UnimplementedError();
+  Future<int> updatePopularMovies(PopularMovieEntity entity) {
+    return databaseHelper
+        .updatePopularMovies(popularMovieMapper.mapToModel(entity));
   }
 }

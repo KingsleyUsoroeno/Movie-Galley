@@ -7,6 +7,7 @@ import 'package:movies/features/movies/ui/components/custom_search_delegate.dart
 import 'package:movies/features/movies/ui/components/custom_search_view.dart';
 import 'package:movies/features/movies/ui/screens/movies/movie_category_card.dart';
 import 'package:movies/features/movies/ui/screens/movies/now_playing_movie_card.dart';
+import 'package:movies/features/movies/ui/screens/movies/popular_movie_card.dart';
 import 'package:movies/injection_container.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -61,12 +62,15 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 30.0,
+                  ),
                   width: double.infinity,
                   decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.only(topLeft: Radius.circular(40.0)),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40.0),
+                      ),
                       color: Colors.white),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -86,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                       NowPlayingMovieCard(),
                       SizedBox(height: 20.0),
                       // POPULAR MOVIES
-                      //PopularMovieCard()
+                      PopularMovieCard()
                     ],
                   ),
                 )

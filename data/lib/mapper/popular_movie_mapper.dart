@@ -56,8 +56,4 @@ class PopularMovieEntityMapper
           .toList(),
     );
   }
-
-  List<PopularMovie> mapFromEntityList(List<PopularMovieEntity> movieEntity) {
-    return movieEntity.map((e) => mapFromEntity(e)).toList();
-  }
 }

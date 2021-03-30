@@ -2,8 +2,7 @@ import 'package:cache/imports/module_imports.dart';
 import 'package:cache/mapper/base/cache_model_mapper.dart';
 import 'package:cache/models/cache_movie_model.dart';
 
-class CacheMovieMapper
-    implements CacheModelMapper<CacheMovieModel, MovieEntity> {
+class CacheMovieMapper extends CacheModelMapper<CacheMovieModel, MovieEntity> {
   @override
   MovieEntity mapToEntity(CacheMovieModel model) {
     return MovieEntity(

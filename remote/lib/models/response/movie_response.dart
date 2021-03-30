@@ -1,12 +1,12 @@
 import 'movie_result.dart';
 
-class MovieRemoteModel {
+class MovieResponse {
   int page;
   int totalResults;
   int totalPages;
   List<MovieResult> results;
 
-  MovieRemoteModel({
+  MovieResponse({
     int page,
     int totalResults,
     int totalPages,
@@ -18,7 +18,7 @@ class MovieRemoteModel {
     this.results = results;
   }
 
-  MovieRemoteModel.fromJson(Map<String, dynamic> json) {
+  MovieResponse.fromJson(Map<String, dynamic> json) {
     page = json['page'];
     totalResults = json['total_results'];
     totalPages = json['total_pages'];

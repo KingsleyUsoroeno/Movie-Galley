@@ -1,13 +1,12 @@
 import 'package:cache/imports/module_imports.dart';
 import 'package:cache/mapper/base/cache_model_mapper.dart';
-import 'package:cache/models/cache_now_playing_movies.dart';
+import 'package:cache/models/cache_popular_movie.dart';
 
-class CacheNowPlayingMovieMapper
-    extends CacheModelMapper<CacheNowPlayingMovie, NowPlayingMovieEntity> {
+class CachePopularMovieMapper
+    extends CacheModelMapper<CachePopularMovie, PopularMovieEntity> {
   @override
-  NowPlayingMovieEntity mapToEntity(CacheNowPlayingMovie model) {
-    return NowPlayingMovieEntity(
-      id: model.id,
+  PopularMovieEntity mapToEntity(CachePopularMovie model) {
+    return PopularMovieEntity(
       totalPages: model.totalPages,
       totalResults: model.totalResults,
       results: model.results
@@ -30,9 +29,8 @@ class CacheNowPlayingMovieMapper
   }
 
   @override
-  CacheNowPlayingMovie mapToModel(NowPlayingMovieEntity entity) {
-    return CacheNowPlayingMovie(
-        id: entity.id,
+  CachePopularMovie mapToModel(PopularMovieEntity entity) {
+    return CachePopularMovie(
         totalPages: entity.totalPages,
         totalResults: entity.totalResults,
         results: entity.results

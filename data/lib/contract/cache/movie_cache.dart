@@ -9,7 +9,7 @@ abstract class MovieCache {
 
   Future deleteAllMovies();
 
-  Future<int> saveNowPlaying(NowPlayingMovieEntity nowPlayingDatabaseModel);
+  Future<int> saveNowPlaying(NowPlayingMovieEntity movieEntity);
 
   Future<int> updateNowPlaying(NowPlayingMovieEntity nowPlaying);
 

@@ -1,10 +1,10 @@
 import 'package:domain/model/result.dart';
 import 'package:flutter/material.dart';
+import 'package:movies/core/constant.dart';
 
 const boldTextStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
 
 class MovieDetail extends StatelessWidget {
-  final String imageUrl = 'https://image.tmdb.org/t/p/w500/';
   final MovieResult movieResult;
 
   MovieDetail({this.movieResult});
@@ -19,15 +19,14 @@ class MovieDetail extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: 350,
               child: Stack(
-                overflow: Overflow.visible,
                 children: <Widget>[
                   Container(
                     width: double.infinity,
                     height: 250.0,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image:
-                                NetworkImage(imageUrl + movieResult.posterPath),
+                            image: NetworkImage(
+                                Constants.IMAGE_URL + movieResult.posterPath),
                             fit: BoxFit.cover)),
                     child: Container(
                       height: 350.0,
@@ -56,8 +55,8 @@ class MovieDetail extends StatelessWidget {
                           width: 150,
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                  image: NetworkImage(
-                                      imageUrl + movieResult.posterPath),
+                                  image: NetworkImage(Constants.IMAGE_URL +
+                                      movieResult.posterPath),
                                   fit: BoxFit.cover),
                               borderRadius: BorderRadius.circular(10.0)),
                           child: Container(),

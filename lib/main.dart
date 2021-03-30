@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
               di.injector<NowPlayingMovieBloc>()..add(FetchNowPlayingMovies()),
         ),
         BlocProvider<PopularMovieBloc>(
-          create: (BuildContext context) =>
+          create: (_) =>
               di.injector<PopularMovieBloc>()..add(FetchPopularMovies()),
         ),
         BlocProvider<MovieSearchBloc>(
