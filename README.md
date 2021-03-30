@@ -1,22 +1,32 @@
-# movies
 
-A new Flutter application.
+# Movie Gallery.
 
-## Getting Started
+<h3 align="center">Please help this repo with a :star: if you find it useful! :blush:</h3>
 
-So i started my Flutter Adventure a little over a year ago and ever since then its been an amazing journey learning how to use these amazing framework to create cross-platfrom applications for both Android and IOS.
-While learning much about flutter, i ran into so many conversations regarding using a clean Architecture to modularise and build out a flutter project using a combination and following a wide variety of state management tools that flutter has to offer such as Bloc, Provider, Mobx etc.
-These movie App is highly inspired by resocoder Test Driven Development Architecture course which can be found [here](https://resocoder.com/category/tutorials/flutter/tdd-clean-architecture/)
-It Uses the Movie Db Api to fetch movies from its remote counterpart and saves it in a local database using the [Sqflite](https://pub.dev/packages/sqflite) Flutter plugin, while setting up these project i had no idea about [moor](https://pub.dev/packages/moor), which is a Room Like Database for flutter which i would higly recommend for my next project as well as upgrading the network package which is being used to another package such as [Dio](https://pub.dev/packages/dio).
-Anyways the App is split up into different packages and offeres functionalities such as lazy Loading list pagination, offline storage and Search Implemention using flutters search Delegate widget.
+Hey there 👋🏼👋🏼👋🏼
 
-## Libraries used
-* Http read more about it [here](https://pub.dev/packages/http)
-* Sqflite read more about it [here](https://pub.dev/packages/sqflite)
-* Bloc for state management read more [here](https://pub.dev/packages/flutter_bloc)
-* Dependency injection using the Get_it library
-* and lots more
+This project tries to follow the principles of clean architecture in flutter by introducing the 
+concept of modularisation the idea was sparked after learning more about the benefits of 
+clean architecture and modularisation from a native android perspective and from the resource linked below.
 
+Resources Used: 
+[Blog](https://medium.com/flutter-community/modular-flutter-apps-design-and-considerations-59c5ac65352),
+[Repo](https://github.com/Vanethos/flutter_modular_app/tree/feature/modular_approach)
+
+## Features
+* Clean Architecture with Bloc (State management library with flutter)
+* Dartz(Functional programming in dart)
+* SqFlite(for offline caching)
+* Get It for dependency injection
+* GitHub actions for CI
+
+## Libraries
+* [Http](https://pub.dev/packages/http) Used for making network request to our MovieDb API
+* [Sqflite](https://pub.dev/packages/sqflite) Used for caching network response locally for offline viewing 
+* [Bloc](https://pub.dev/packages/flutter_bloc) state management solution with a UniDirectional flow approach
+* [GetIt](https://pub.dev/packages/flutter_bloc) used for dependency injection
+* [Dartz](https://pub.dev/packages/flutter_bloc) Introduces the concept of functional programming in dart
+* [Mockito](https://pub.dev/packages/flutter_bloc) Used for creating mock classes when needed across different test suites
 
 ## Screenshots
 <p float="left">
