@@ -1,13 +1,7 @@
-import 'package:dartz/dartz.dart';
-import 'package:domain/exception/failure.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:movies/core/bloc/movie_category/movie_bloc.dart';
-import 'package:movies/core/bloc/movie_category/movie_event.dart';
-import 'package:movies/core/bloc/movie_category/movie_state.dart';
 
 import 'mock__fetch_movie_usecase.dart';
-import 'mock_database_model.dart';
 
 void main() {
   MockFetchMovieUseCase fetchMovieUseCase;
@@ -31,38 +25,43 @@ void main() {
   });
 
   group('FetchMovies Event', () {
-    test('emits [InitialMovieState, movieLoading, movieError] when FetchMovies is added and fetchAllMovieCategories fails', () {
-      when(fetchMovieUseCase.execute(any))
-          .thenAnswer((_) async => Left(CacheFailure()));
+    // test(
+    //     'emits [InitialMovieState, movieLoading, movieError]'
+    //     ' when FetchMovies is added and fetchAllMovieCategories fails', () {
+    //   when(fetchMovieUseCase.execute(any))
+    //       .thenAnswer((_) async => Left(CacheFailure()));
+    //   // act
+    //   movieBloc.add(FetchMovies());
+    //   //assert
+    //   final expectedResponse = [
+    //     MovieLoading(),
+    //     MovieError("Cache Failure"),
+    //   ];
+    //
+    //   expectLater(movieBloc, emitsInOrder(expectedResponse));
+    // });
 
-      // act
-      movieBloc.add(FetchMovies());
-
-      //assert
-      final expectedResponse = [MovieLoading(), MovieError("Cache Failure")];
-
-      expectLater(movieBloc, emitsInOrder(expectedResponse));
-    });
-
-    test('emits [InitialMovieState,movieLoading, MovieLoaded] when FetchMovies is added and fetchAllMovieCategories succeeds', () async {
-      final movies = MockDatabaseModel.movieList;
-
-      when(fetchMovieUseCase.execute(any))
-          .thenAnswer((_) async => Right(movies));
-
-      // act
-      movieBloc.add(FetchMovies());
-
-      // assert
-      final expectedResponse = [
-        MovieLoading(),
-        MovieLoaded(movie: movies.first)
-      ];
-
-      expectLater(
-        movieBloc,
-        emitsInOrder(expectedResponse),
-      );
-    });
+    // test(
+    //     'emits [InitialMovieState,movieLoading, MovieLoaded] when FetchMovies is added and fetchAllMovieCategories succeeds',
+    //     () async {
+    //   final movies = MockDatabaseModel.movieList;
+    //
+    //   when(fetchMovieUseCase.execute(any))
+    //       .thenAnswer((_) async => Right(movies));
+    //
+    //   // act
+    //   movieBloc.add(FetchMovies());
+    //
+    //   // assert
+    //   final expectedResponse = [
+    //     MovieLoading(),
+    //     MovieLoaded(movie: movies.first)
+    //   ];
+    //
+    //   expectLater(
+    //     movieBloc,
+    //     emitsInOrder(expectedResponse),
+    //   );
+    // });
   });
 }
