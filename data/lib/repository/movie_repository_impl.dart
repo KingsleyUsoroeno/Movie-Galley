@@ -61,7 +61,7 @@ class MovieRepositoryImpl implements MovieRepository {
       if (cachedMovie != null && cachedMovie.isNotEmpty) {
         return Right(nowPlayingMovieMapper.mapFromEntityList(cachedMovie));
       } else {
-        final movie = await getNowPlayingMovies(1, false);
+        final movie = await getNowPlayingMovies(page, false);
         await movieCache.saveNowPlaying(movie);
         final savedMovie = await movieCache.getAllNowPlaying();
         return Right(nowPlayingMovieMapper.mapFromEntityList(savedMovie));

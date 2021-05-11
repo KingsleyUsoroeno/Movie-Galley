@@ -43,13 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
-  cupertino_icons:
-    dependency: "direct main"
+  dartz:
+    dependency: transitive
     description:
-      name: cupertino_icons
+      name: dartz
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "0.9.2"
   data:
     dependency: "direct main"
     description:
@@ -57,6 +57,20 @@ packages:
       relative: true
     source: path
     version: "1.0.0+1"
+  domain:
+    dependency: transitive
+    description:
+      path: "../domain"
+      relative: true
+    source: path
+    version: "1.0.0+1"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   fake_async:
     dependency: transitive
     description:
