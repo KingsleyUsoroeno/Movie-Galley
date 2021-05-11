@@ -1,7 +1,14 @@
+import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
+import 'package:domain/exception/failure.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:movies/core/bloc/movie_category/movie_bloc.dart';
+import 'package:movies/core/bloc/movie_category/movie_event.dart';
+import 'package:movies/core/bloc/movie_category/movie_state.dart';
 
 import 'mock__fetch_movie_usecase.dart';
+import 'mock_database_model.dart';
 
 void main() {
   MockFetchMovieUseCase fetchMovieUseCase;
@@ -17,51 +24,42 @@ void main() {
     movieBloc?.close();
   });
 
-  // test('throws AssertionError if MovieRepository is null', () {
-  //   expect(
-  //     () => MovieBloc(fetchMovie: null),
-  //     throwsA(isAssertionError),
-  //   );
-  // });
+  test('throws AssertionError if MovieRepository is null', () {
+    expect(
+      () => MovieBloc(fetchMovie: null),
+      throwsA(isAssertionError),
+    );
+  });
 
-  // group('FetchMovies Event', () {
-  //   // test(
-  //   //     'emits [InitialMovieState, movieLoading, movieError]'
-  //   //     ' when FetchMovies is added and fetchAllMovieCategories fails', () {
-  //   //   when(fetchMovieUseCase.execute(any))
-  //   //       .thenAnswer((_) async => Left(CacheFailure()));
-  //   //   // act
-  //   //   movieBloc.add(FetchMovies());
-  //   //   //assert
-  //   //   final expectedResponse = [
-  //   //     MovieLoading(),
-  //   //     MovieError("Cache Failure"),
-  //   //   ];
-  //   //
-  //   //   expectLater(movieBloc, emitsInOrder(expectedResponse));
-  //   // });
-  //
-  //   // test(
-  //   //     'emits [InitialMovieState,movieLoading, MovieLoaded] when FetchMovies is added and fetchAllMovieCategories succeeds',
-  //   //     () async {
-  //   //   final movies = MockDatabaseModel.movieList;
-  //   //
-  //   //   when(fetchMovieUseCase.execute(any))
-  //   //       .thenAnswer((_) async => Right(movies));
-  //   //
-  //   //   // act
-  //   //   movieBloc.add(FetchMovies());
-  //   //
-  //   //   // assert
-  //   //   final expectedResponse = [
-  //   //     MovieLoading(),
-  //   //     MovieLoaded(movie: movies.first)
-  //   //   ];
-  //   //
-  //   //   expectLater(
-  //   //     movieBloc,
-  //   //     emitsInOrder(expectedResponse),
-  //   //   );
-  //   // });
-  // });
+  group('FetchMovies Event', () {
+    blocTest(
+      'emits [MovieLoading, MovieError] when FetchMovies'
+      ' is added and movies are not retrieved successfully',
+      build: () {
+        when(fetchMovieUseCase.execute(any))
+            .thenAnswer((_) async => Left(CacheFailure()));
+        return movieBloc;
+      },
+      act: (MovieBloc bloc) {
+        bloc.add(FetchMovies());
+      },
+      expect: () => [MovieLoading(), MovieError("Cache Failure")],
+    );
+
+    blocTest(
+      'emits [MovieLoading, MovieLoaded] when FetchMovies'
+      ' is added and movies are retrieved successfully',
+      build: () {
+        final movies = MockDatabaseModel.movieList;
+        when(fetchMovieUseCase.execute(any))
+            .thenAnswer((_) async => Right(movies));
+        return movieBloc;
+      },
+      act: (MovieBloc bloc) {
+        bloc.add(FetchMovies());
+      },
+      expect: () =>
+          [MovieLoading(), MovieLoaded(movie: MockDatabaseModel.movie)],
+    );
+  });
 }

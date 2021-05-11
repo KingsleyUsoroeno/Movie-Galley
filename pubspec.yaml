@@ -28,6 +28,7 @@ dependencies:
   sqflite:
   path_provider:
   flutter_bloc: ^7.0.0
+  bloc_test: ^8.0.0
   equatable: ^2.0.0
   # Functional programming thingies
   dartz: ^0.9.2
