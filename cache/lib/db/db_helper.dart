@@ -43,33 +43,19 @@ class DatabaseHelper {
   }
 
   void _createDb(Database db) {
-    String sqlCreateMovieTable = 'CREATE TABLE $movies('
-        '$_columnId INTEGER PRIMARY KEY AUTOINCREMENT,'
-        '$_columnPage INTEGER,'
-        '$_columnTotalResults INTEGER,'
-        '$_columnTotalPages INTEGER,'
-        '$_columnMovieResults TEXT'
-        ')';
+    db.execute(createTableQuery(movies));
+    db.execute(createTableQuery(nowPlaying));
+    db.execute(createTableQuery(popularMovies));
+  }
 
-    String sqlCreateNowPlayingMoviesTable = 'CREATE TABLE $nowPlaying('
-        '$_columnId INTEGER PRIMARY KEY AUTOINCREMENT,'
-        '$_columnPage INTEGER,'
-        '$_columnTotalResults INTEGER,'
-        '$_columnTotalPages INTEGER,'
-        'dates TEXT,'
-        '$_columnMovieResults TEXT'
-        ')';
-
-    String sqlCreatePopularMoviesTable = 'CREATE TABLE $popularMovies('
+  String createTableQuery(String tableName) {
+    return 'CREATE TABLE $tableName('
         '$_columnId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$_columnPage INTEGER,'
         '$_columnTotalResults INTEGER,'
         '$_columnTotalPages INTEGER,'
         '$_columnMovieResults TEXT'
         ')';
-    db.execute(sqlCreateMovieTable);
-    db.execute(sqlCreateNowPlayingMoviesTable);
-    db.execute(sqlCreatePopularMoviesTable);
   }
 
   Future<int> saveMovie(MovieModel movie) async {

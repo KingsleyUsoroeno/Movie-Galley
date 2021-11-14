@@ -5,7 +5,7 @@ import 'package:domain/model/movie_result.dart';
 
 import 'base/entity_mapper.dart';
 
-class MovieMapper extends EntityMapper<MovieEntity, Movie> {
+class MovieEntityMapper extends EntityMapper<MovieEntity, Movie> {
   @override
   Movie mapFromEntity(MovieEntity entity) {
     return Movie(

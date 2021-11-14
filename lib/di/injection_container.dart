@@ -3,7 +3,7 @@ import 'package:cache/db/db_helper.dart';
 import 'package:cache/mapper/cache_movie_mapper.dart';
 import 'package:data/contract/cache/movie_cache.dart';
 import 'package:data/contract/remote/movie_remote.dart';
-import 'package:data/mapper/movie_mapper.dart';
+import 'package:data/mapper/movie_entity_mapper.dart';
 import 'package:data/repository/movie_repository_impl.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:domain/repository/movie_repository.dart';
@@ -49,7 +49,7 @@ Future<void> init() async {
         () => MovieRepositoryImpl(
       movieRemote: injector.get(),
       movieCache: injector.get(),
-      movieMapper: MovieMapper(),
+      movieMapper: MovieEntityMapper(),
     ),
   );
 
@@ -62,7 +62,7 @@ Future<void> init() async {
 
   // injecting our MovieRemote
   injector.registerLazySingleton<MovieRemote>(
-        () => MovieRemoteImpl(
+    () => MovieRemoteImpl(
       httpClient: http.Client(),
       movieRemoteMapper: MovieRemoteMapper(),
     ),
@@ -70,18 +70,25 @@ Future<void> init() async {
 
   injector.registerLazySingleton(() => DatabaseHelper.db);
 
-  injector
-      .registerFactory(() => FetchNowPlaying(movieRepository: injector.get()));
-
-  injector.registerFactory(() => FetchMovie(movieRepository: injector.get()));
-
-  injector.registerFactory(() => SearchMovie(movieRepository: injector.get()));
+  injector.registerFactory(
+    () => FetchNowPlaying(movieRepository: injector.get()),
+  );
 
   injector.registerFactory(
-      () => FetchPopularMovie(movieRepository: injector.get()));
+    () => FetchMovie(movieRepository: injector.get()),
+  );
 
-  injector
-      .registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(injector()));
+  injector.registerFactory(
+    () => SearchMovie(movieRepository: injector.get()),
+  );
+
+  injector.registerFactory(
+    () => FetchPopularMovie(movieRepository: injector.get()),
+  );
+
+  injector.registerLazySingleton<NetworkInfo>(
+    () => NetworkInfoImpl(injector()),
+  );
 
   injector.registerLazySingleton(() => DataConnectionChecker());
 }

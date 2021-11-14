@@ -7,9 +7,7 @@ import 'package:domain/usecase/base/either_use_case.dart';
 class FetchMovie implements EitherUseCase<String, List<Movie>> {
   final MovieRepository movieRepository;
 
-  FetchMovie({
-    this.movieRepository,
-  });
+  FetchMovie({this.movieRepository});
 
   @override
   Future<Either<Failure, List<Movie>>> execute(String params) {

@@ -17,12 +17,6 @@ class MovieEntity {
     @required this.results,
   });
 
-  @override
-  String toString() {
-    return 'MovieEntity{id: $id, page: $page, totalResults: $totalResults, '
-        'totalPages: $totalPages, results: $results}';
-  }
-
   MovieEntity copyWith({
     int page,
     int totalResults,
@@ -36,5 +30,11 @@ class MovieEntity {
       totalPages: totalPages ?? this.totalPages,
       results: results ?? this.results,
     );
+  }
+
+  @override
+  String toString() {
+    return 'MovieEntity{id: $id, page: $page, totalResults: $totalResults, '
+        'totalPages: $totalPages, results: $results}';
   }
 }

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:data/contract/cache/movie_cache.dart';
 import 'package:data/contract/remote/movie_remote.dart';
-import 'package:data/mapper/movie_mapper.dart';
+import 'package:data/mapper/movie_entity_mapper.dart';
 import 'package:data/model/movie_entity.dart';
 import 'package:domain/exception/failure.dart';
 import 'package:domain/model/movie.dart';
@@ -12,7 +12,7 @@ import 'package:meta/meta.dart';
 class MovieRepositoryImpl implements MovieRepository {
   final MovieRemote movieRemote;
   final MovieCache movieCache;
-  final MovieMapper movieMapper;
+  final MovieEntityMapper movieMapper;
 
   MovieRepositoryImpl({
     @required this.movieRemote,
