@@ -1,10 +1,10 @@
 import 'package:cache/imports/module_imports.dart';
 import 'package:cache/mapper/base/cache_model_mapper.dart';
-import 'package:cache/models/cache_movie_model.dart';
+import 'package:cache/models/movie_model.dart';
 
-class CacheMovieMapper extends CacheModelMapper<CacheMovieModel, MovieEntity> {
+class CacheMovieMapper extends CacheModelMapper<MovieModel, MovieEntity> {
   @override
-  MovieEntity mapToEntity(CacheMovieModel model) {
+  MovieEntity mapToEntity(MovieModel model) {
     return MovieEntity(
       id: model.id,
       page: model.page,
@@ -30,27 +30,28 @@ class CacheMovieMapper extends CacheModelMapper<CacheMovieModel, MovieEntity> {
   }
 
   @override
-  CacheMovieModel mapToModel(MovieEntity entity) {
-    return CacheMovieModel(
-        id: entity.id,
-        page: entity.page,
-        totalPages: entity.totalPages,
-        totalResults: entity.totalResults,
-        results: entity.results
-            .map((e) => CacheMovieResult(
-                popularity: e.popularity,
-                voteCount: e.voteCount,
-                video: e.video,
-                posterPath: e.posterPath,
-                id: e.id,
-                adult: e.adult,
-                backdropPath: e.backdropPath,
-                originalLanguage: e.originalLanguage,
-                originalTitle: e.originalTitle,
-                genreIds: e.genreIds,
-                title: e.title,
-                overview: e.overview,
-                releaseDate: e.releaseDate))
-            .toList());
+  MovieModel mapToModel(MovieEntity entity) {
+    return MovieModel(
+      id: entity.id,
+      page: entity.page,
+      totalPages: entity.totalPages,
+      totalResults: entity.totalResults,
+      results: entity.results
+          .map((e) => CacheMovieResult(
+              popularity: e.popularity,
+              voteCount: e.voteCount,
+              video: e.video,
+              posterPath: e.posterPath,
+              id: e.id,
+              adult: e.adult,
+              backdropPath: e.backdropPath,
+              originalLanguage: e.originalLanguage,
+              originalTitle: e.originalTitle,
+              genreIds: e.genreIds,
+              title: e.title,
+              overview: e.overview,
+              releaseDate: e.releaseDate))
+          .toList(),
+    );
   }
 }

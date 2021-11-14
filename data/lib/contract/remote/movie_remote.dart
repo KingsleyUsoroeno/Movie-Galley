@@ -1,16 +1,11 @@
 import 'package:data/model/movie_entity.dart';
-import 'package:data/model/now_playing_movie_entity.dart';
-import 'package:data/model/popular_movie_entity.dart';
 
 abstract class MovieRemote {
-  Future<MovieEntity> fetchAllMovieCategories();
+  Future<MovieEntity> fetchMovieCategories();
 
-  Future<PopularMovieEntity> fetchPopularMovies(
-      {int page, bool loadMore = false});
+  Future<MovieEntity> fetchPopularMovies({int page});
 
-  Future<NowPlayingMovieEntity> fetchAllNowPlayingMovies(
-      {int page, bool loadMore = false});
+  Future<MovieEntity> fetchNowPlayingMovies({int page});
 
-  Future<MovieEntity> searchForMovie(String query, int page,
-      {bool loadMore = false});
+  Future<MovieEntity> searchForMovie(String query, int page);
 }

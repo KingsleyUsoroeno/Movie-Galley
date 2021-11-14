@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domain/exception/failure.dart';
-import 'package:domain/model/now_playing_movie.dart';
+import 'package:domain/imports/module_imports.dart';
 import 'package:domain/usecase/movies/fetch_now_playing.dart';
 import 'package:meta/meta.dart';
 
@@ -56,11 +56,10 @@ class NowPlayingMovieBloc
   }
 
   Stream<NowPlayingMoviesState> _eitherLoadedOrErrorState(
-      Either<Failure, List<NowPlayingMovie>> failureOrMovies) async* {
+      Either<Failure, List<Movie>> failureOrMovies) async* {
     yield failureOrMovies.fold(
       (failure) => NowPlayingMovieError(errorMessage: failure.toString()),
       (movie) {
-        print("bloc list is ${movie.first.results.length}");
         return NowPlayingMovieLoaded(nowPlayingMovies: movie.first);
       },
     );

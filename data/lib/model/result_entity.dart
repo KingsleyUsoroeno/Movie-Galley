@@ -1,42 +1,33 @@
+import 'package:meta/meta.dart';
+
 class ResultEntity {
-  dynamic popularity;
-  dynamic voteCount;
-  bool video;
-  String posterPath;
-  dynamic id;
-  bool adult;
-  String backdropPath;
-  String originalLanguage;
-  String originalTitle;
-  List<int> genreIds;
-  String title;
-  String overview;
-  String releaseDate;
+  final dynamic popularity;
+  final dynamic voteCount;
+  final bool video;
+  final String posterPath;
+  final dynamic id;
+  final bool adult;
+  final String backdropPath;
+  final String originalLanguage;
+  final String originalTitle;
+  final List<int> genreIds;
+  final String title;
+  final String overview;
+  final String releaseDate;
 
   ResultEntity({
-    this.popularity,
-    this.voteCount,
-    this.video,
-    this.posterPath,
-    this.id,
-    this.adult,
-    this.backdropPath,
-    this.originalLanguage,
-    this.originalTitle,
-    this.genreIds,
-    this.title,
-    this.overview,
-    this.releaseDate,
+    @required this.popularity,
+    @required this.voteCount,
+    @required this.video,
+    @required this.posterPath,
+    @required this.id,
+    @required this.adult,
+    @required this.backdropPath,
+    @required this.originalLanguage,
+    @required this.originalTitle,
+    @required this.genreIds,
+    @required this.title,
+    @required this.overview,
+    @required this.releaseDate,
   });
-
-  @override
-  String toString() {
-    return 'Results{_popularity: $popularity, _voteCount: $voteCount, '
-        '_video: $video, _posterPath: $posterPath, _id: $id, '
-        '_adult: $adult, _backdropPath: $backdropPath,'
-        ' _originalLanguage: $originalLanguage, '
-        '_originalTitle: $originalTitle, '
-        '_genreIds: $genreIds, _title: $title,'
-        ' _overview: $overview, _releaseDate: $releaseDate}';
-  }
 }

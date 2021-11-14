@@ -1,52 +1,56 @@
+import 'package:meta/meta.dart';
+
 class CacheMovieResult {
-  dynamic popularity;
-  dynamic voteCount;
-  bool video;
-  String posterPath;
-  dynamic id;
-  bool adult;
-  String backdropPath;
-  String originalLanguage;
-  String originalTitle;
-  List<int> genreIds;
-  String title;
-  String overview;
-  String releaseDate;
+  final dynamic popularity;
+  final dynamic voteCount;
+  final bool video;
+  final String posterPath;
+  final dynamic id;
+  final bool adult;
+  final String backdropPath;
+  final String originalLanguage;
+  final String originalTitle;
+  final List<int> genreIds;
+  final String title;
+  final String overview;
+  final String releaseDate;
 
   CacheMovieResult({
-    this.popularity,
-    this.voteCount,
-    this.video,
-    this.posterPath,
-    this.id,
-    this.adult,
-    this.backdropPath,
-    this.originalLanguage,
-    this.originalTitle,
-    this.genreIds,
-    this.title,
-    this.overview,
-    this.releaseDate,
+    @required this.popularity,
+    @required this.voteCount,
+    @required this.video,
+    @required this.posterPath,
+    @required this.id,
+    @required this.adult,
+    @required this.backdropPath,
+    @required this.originalLanguage,
+    @required this.originalTitle,
+    @required this.genreIds,
+    @required this.title,
+    @required this.overview,
+    @required this.releaseDate,
   });
 
-  CacheMovieResult.fromJson(Map<String, dynamic> json) {
-    popularity = json['popularity'];
-    voteCount = json['vote_count'];
-    video = json['video'];
-    posterPath = json['poster_path'];
-    id = json['id'];
-    adult = json['adult'];
-    backdropPath = json['backdrop_path'];
-    originalLanguage = json['original_language'];
-    originalTitle = json['original_title'];
-    genreIds = json['genre_ids'].cast<int>();
-    title = json['title'];
-    overview = json['overview'];
-    releaseDate = json['release_date'];
+  factory CacheMovieResult.fromJson(Map<String, dynamic> json) {
+    return CacheMovieResult(
+      popularity: json['popularity'],
+      voteCount: json['vote_count'],
+      video: json['video'],
+      posterPath: json['poster_path'],
+      id: json['id'],
+      adult: json['adult'],
+      backdropPath: json['backdrop_path'],
+      originalLanguage: json['original_language'],
+      originalTitle: json['original_title'],
+      genreIds: json['genre_ids'].cast<int>(),
+      title: json['title'],
+      overview: json['overview'],
+      releaseDate: json['release_date'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['popularity'] = this.popularity;
     data['vote_count'] = this.voteCount;
     data['video'] = this.video;

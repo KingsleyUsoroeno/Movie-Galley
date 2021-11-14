@@ -1,4 +1,4 @@
-import 'package:domain/model/popular_movie.dart';
+import 'package:domain/imports/module_imports.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class PopularMovieState extends Equatable {
@@ -13,7 +13,7 @@ class InitialPopularMovieState extends PopularMovieState {}
 class PopularMovieLoading extends PopularMovieState {}
 
 class PopularMovieLoaded extends PopularMovieState {
-  final PopularMovie popularMovie;
+  final Movie popularMovie;
 
   PopularMovieLoaded({this.popularMovie});
 

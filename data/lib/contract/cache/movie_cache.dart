@@ -1,29 +1,21 @@
 import 'package:data/model/movie_entity.dart';
-import 'package:data/model/now_playing_movie_entity.dart';
-import 'package:data/model/popular_movie_entity.dart';
 
 abstract class MovieCache {
   Future<int> saveMovie(MovieEntity movie);
 
   Future<int> updateMovie(MovieEntity movie);
 
-  Future deleteAllMovies();
+  Future<int> saveNowPlaying(MovieEntity movieEntity);
 
-  Future<int> saveNowPlaying(NowPlayingMovieEntity movieEntity);
+  Future<int> updateNowPlaying(MovieEntity movieEntity);
 
-  Future<int> updateNowPlaying(NowPlayingMovieEntity nowPlaying);
+  Future<int> savePopularMovies(MovieEntity movieEntity);
 
-  Future deleteAllNowPlaying();
+  Future<int> updatePopularMovies(MovieEntity movieEntity);
 
-  Future<int> savePopularMovies(PopularMovieEntity popularMovies);
+  Future<List<MovieEntity>> getCachedMovies();
 
-  Future deleteAllPopularMovies();
+  Future<List<MovieEntity>> getCachedNowPlaying();
 
-  Future<int> updatePopularMovies(PopularMovieEntity nowPlaying);
-
-  Future<List<MovieEntity>> getAllMovies();
-
-  Future<List<NowPlayingMovieEntity>> getAllNowPlaying();
-
-  Future<List<PopularMovieEntity>> getAllPopularMovies();
+  Future<List<MovieEntity>> getCachedPopularMovies();
 }

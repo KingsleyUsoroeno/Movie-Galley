@@ -1,12 +1,8 @@
 import 'package:data/model/movie_entity.dart';
-import 'package:data/model/now_playing_movie_entity.dart';
-import 'package:data/model/popular_movie_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
 import 'package:remote/mapper/movie_remote_mapper.dart';
-import 'package:remote/mapper/now_playing_movie_remote_mapper.dart';
-import 'package:remote/mapper/popular_movie_model_mapper.dart';
 import 'package:remote/remote/movie_remote_impl.dart';
 
 import 'json_parser.dart';
@@ -22,8 +18,6 @@ void main() {
     movieRemote = MovieRemoteImpl(
       httpClient: client,
       movieRemoteMapper: MovieRemoteMapper(),
-      nowPlayingMovieMapper: NowPlayingMovieRemoteMapper(),
-      popularMovieEntityMapper: PopularMovieModelMapper(),
     );
     jsonParser = JsonParser();
   });
@@ -43,17 +37,17 @@ void main() {
           headers: {'content-type': 'application/json; charset=utf-8'},
         ),
       );
-      expect(await movieRemote.fetchAllMovieCategories(), isA<MovieEntity>());
+      expect(await movieRemote.fetchMovieCategories(), isA<MovieEntity>());
     });
 
     // Using throwsA is also a good idea as it lets you to be specific about
     // what Exception you expected the function to throw if the logic was met
     test("throws an exception if the http call completes with an error",
         () async {
-      when(client.get(Uri.parse(
+          when(client.get(Uri.parse(
               "https://api.themoviedb.org/3/discover/movie?api_key=98d4ab8983c3a5727df9ab4f565f5f4a")))
           .thenAnswer((_) async => http.Response('Not Found', 404));
-      expect(movieRemote.fetchAllMovieCategories(), throwsException);
+      expect(movieRemote.fetchMovieCategories(), throwsException);
     });
 
     test(
@@ -71,17 +65,15 @@ void main() {
           headers: {'content-type': 'application/json; charset=utf-8'},
         ),
       );
-      expect(await movieRemote.fetchAllNowPlayingMovies(loadMore: false),
-          isA<NowPlayingMovieEntity>());
+      expect(await movieRemote.fetchNowPlayingMovies(), isA<MovieEntity>());
     });
 
     test(
         "throws an exception if fetching Now Playing movies completes with an error",
         () async {
-      when(client.get(any))
+          when(client.get(any))
           .thenAnswer((_) async => http.Response('Not Found', 404));
-      expect(movieRemote.fetchAllNowPlayingMovies(loadMore: false),
-          throwsException);
+      expect(movieRemote.fetchNowPlayingMovies(), throwsException);
     });
 
     test(
@@ -98,8 +90,7 @@ void main() {
         ),
       );
 
-      expect(await movieRemote.fetchPopularMovies(loadMore: false),
-          isA<PopularMovieEntity>());
+      expect(await movieRemote.fetchPopularMovies(), isA<MovieEntity>());
     });
   });
 }

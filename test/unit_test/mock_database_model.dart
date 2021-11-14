@@ -1,8 +1,9 @@
 import 'package:domain/imports/module_imports.dart';
-import 'package:domain/model/result.dart';
+import 'package:domain/model/movie_result.dart';
 
 class MockDatabaseModel {
   static final movie = Movie(
+    id: 2,
     page: 1,
     totalPages: 3,
     totalResults: 4,
@@ -25,7 +26,9 @@ class MockDatabaseModel {
     ],
   );
 
-  static final nowPlayingMovies = NowPlayingMovie(
+  static final nowPlayingMovies = Movie(
+    id: 3,
+    page: 2,
     totalPages: 3,
     totalResults: 4,
     results: [

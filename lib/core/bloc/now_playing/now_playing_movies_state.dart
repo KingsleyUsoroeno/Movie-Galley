@@ -1,5 +1,5 @@
-import 'package:domain/model/now_playing_movie.dart';
-import 'package:domain/model/result.dart';
+import 'package:domain/imports/module_imports.dart';
+import 'package:domain/model/movie_result.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class NowPlayingMoviesState extends Equatable {
@@ -14,7 +14,7 @@ class InitialNowPlayingMoviesState extends NowPlayingMoviesState {}
 class NowPlayingMovieLoading extends NowPlayingMoviesState {}
 
 class NowPlayingMovieLoaded extends NowPlayingMoviesState {
-  final NowPlayingMovie nowPlayingMovies;
+  final Movie nowPlayingMovies;
 
   NowPlayingMovieLoaded({this.nowPlayingMovies});
 

@@ -13,6 +13,9 @@ class FetchMoreMovies extends NowPlayingMoviesEvent {
   final bool loadMore;
 
   FetchMoreMovies({this.loadMore});
+
+  @override
+  List<Object> get props => [loadMore];
 }
 
 class RefreshNowPlayingMovies extends NowPlayingMoviesEvent {}

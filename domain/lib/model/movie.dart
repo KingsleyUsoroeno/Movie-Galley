@@ -1,26 +1,19 @@
-import 'result.dart';
+import 'package:flutter/material.dart';
+
+import 'movie_result.dart';
 
 class Movie {
-  int page;
-  int totalResults;
-  int totalPages;
-  List<MovieResult> results;
+  final int id;
+  final int page;
+  final int totalResults;
+  final int totalPages;
+  final List<MovieResult> results;
 
   Movie({
-    int page,
-    int totalResults,
-    int totalPages,
-    List<MovieResult> results,
-  }) {
-    this.page = page;
-    this.totalResults = totalResults;
-    this.totalPages = totalPages;
-    this.results = results;
-  }
-
-  @override
-  String toString() {
-    return 'Movies{page: $page, totalResults: $totalResults, '
-        'totalPages: $totalPages, results: $results}';
-  }
+    @required this.id,
+    @required this.totalPages,
+    @required this.page,
+    @required this.results,
+    @required this.totalResults,
+  });
 }

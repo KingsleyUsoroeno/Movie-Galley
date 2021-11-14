@@ -1,23 +1,40 @@
+import 'package:meta/meta.dart';
+
 import 'result_entity.dart';
 
 class MovieEntity {
-  int id;
-  int page;
-  int totalResults;
-  int totalPages;
-  List<ResultEntity> results;
+  final int id;
+  final int page;
+  final int totalResults;
+  final int totalPages;
+  final List<ResultEntity> results;
 
   MovieEntity({
-    this.id,
-    this.page,
-    this.totalResults,
-    this.totalPages,
-    this.results,
+    @required this.id,
+    @required this.page,
+    @required this.totalResults,
+    @required this.totalPages,
+    @required this.results,
   });
 
   @override
   String toString() {
-    return 'Movies{page: $page, totalResults: $totalResults, '
+    return 'MovieEntity{id: $id, page: $page, totalResults: $totalResults, '
         'totalPages: $totalPages, results: $results}';
+  }
+
+  MovieEntity copyWith({
+    int page,
+    int totalResults,
+    int totalPages,
+    List<ResultEntity> results,
+  }) {
+    return MovieEntity(
+      id: id,
+      page: page ?? this.page,
+      totalResults: totalResults ?? this.totalResults,
+      totalPages: totalPages ?? this.totalPages,
+      results: results ?? this.results,
+    );
   }
 }

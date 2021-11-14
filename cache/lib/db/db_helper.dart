@@ -1,12 +1,9 @@
 import 'dart:io';
 
-import 'package:cache/models/cache_movie_model.dart';
+import 'package:cache/models/movie_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-import '../models/cache_now_playing_movies.dart';
-import '../models/cache_popular_movie.dart';
 
 class DatabaseHelper {
   static Database _database;
@@ -75,69 +72,60 @@ class DatabaseHelper {
     db.execute(sqlCreatePopularMoviesTable);
   }
 
-  Future<int> saveMovie(CacheMovieModel movie) async {
-    await deleteAllMovies();
-    final db = await database;
-    return await db.insert(movies, movie.toJson());
+  Future<int> saveMovie(MovieModel movie) async {
+    await deleteAllMovies(movies);
+    return _cacheMovie(movies, movie);
   }
 
-  Future<int> saveNowPlaying(CacheNowPlayingMovie movie) async {
-    await deleteAllNowPlaying();
-    final db = await database;
-    return await db.insert(nowPlaying, movie.toJson());
+  Future<int> saveNowPlaying(MovieModel movie) async {
+    await deleteAllMovies(nowPlaying);
+    return _cacheMovie(nowPlaying, movie);
   }
 
-  Future<int> savePopularMovies(CachePopularMovie cachePopularMovie) async {
-    await deleteAllPopularMovies();
-    final db = await database;
-    return await db.insert(popularMovies, cachePopularMovie.toJson());
+  Future<int> savePopularMovies(MovieModel movie) async {
+    await deleteAllMovies(popularMovies);
+    return _cacheMovie(popularMovies, movie);
   }
 
-  Future<int> updateMovie(CacheMovieModel movieDatabaseModel) async {
+  Future<int> _cacheMovie(String tableName, MovieModel movie) async {
+    await deleteAllMovies(tableName);
     final db = await database;
-    return db.update(movies, movieDatabaseModel.toJson(),
-        where: 'id = ?',
-        whereArgs: [movieDatabaseModel.id],
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    return await db.insert(tableName, movie.toJson());
   }
 
-  Future<int> updateNowPlaying(CacheNowPlayingMovie nowPlayingMovie) async {
-    final db = await database;
-    return db.update(nowPlaying, nowPlayingMovie.toJson(),
-        where: 'id = ?',
-        whereArgs: [nowPlayingMovie.id],
-        conflictAlgorithm: ConflictAlgorithm.replace);
+  Future<int> updateMovie(MovieModel cacheMovie) async {
+    return await _updateMovie(movies, cacheMovie);
   }
 
-  Future<int> updatePopularMovies(CachePopularMovie popularMovie) async {
-    final db = await database;
-    return db.update(popularMovies, popularMovie.toJson(),
-        where: 'id = ?',
-        whereArgs: [popularMovie.id],
-        conflictAlgorithm: ConflictAlgorithm.replace);
+  Future<int> updateNowPlaying(MovieModel movie) async {
+    return await _updateMovie(nowPlaying, movie);
   }
 
-  Future deleteAllMovies() async {
-    final db = await database;
-    return await db.rawDelete('DELETE FROM $movies');
+  Future<int> updatePopularMovies(MovieModel popularMovie) async {
+    return await _updateMovie(popularMovies, popularMovie);
   }
 
-  Future deleteAllNowPlaying() async {
+  Future<int> _updateMovie(String tableName, MovieModel movie) async {
     final db = await database;
-    return await db.rawDelete('DELETE FROM $nowPlaying');
+    return db.update(
+      tableName,
+      movie.toJson(),
+      where: 'id = ?',
+      whereArgs: [movie.id],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
-  Future deleteAllPopularMovies() async {
+  Future deleteAllMovies(String tableName) async {
     final db = await database;
-    return await db.rawDelete('DELETE FROM $popularMovies');
+    return await db.rawDelete('DELETE FROM $tableName');
   }
 
-  Future<List<CacheMovieModel>> getAllMovies() async {
+  Future<List<MovieModel>> _getCachedMovies(String tableName) async {
     final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(movies);
-    print(maps);
+    final List<Map<String, dynamic>> maps = await db.query(tableName);
     return List.generate(maps.length, (i) {
-      return CacheMovieModel(
+      return MovieModel(
           id: maps[i]['id'],
           page: maps[i]['page'],
           totalResults: maps[i]['totalResults'],
@@ -146,31 +134,15 @@ class DatabaseHelper {
     });
   }
 
-  Future<List<CacheNowPlayingMovie>> getAllNowPlaying() async {
-    final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(nowPlaying);
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
-    return List.generate(maps.length, (i) {
-      return CacheNowPlayingMovie(
-        id: maps[i]['id'],
-        page: maps[i]['page'],
-        totalResults: maps[i]['totalResults'],
-        totalPages: maps[i]["totalPages"],
-        results: movieResultsFromJson(maps[i]["movieResults"]),
-      );
-    });
+  Future<List<MovieModel>> getAllMovies() async {
+    return await _getCachedMovies(movies);
   }
 
-  Future<List<CachePopularMovie>> getAllPopularMovies() async {
-    final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(popularMovies);
-    return List.generate(maps.length, (i) {
-      return CachePopularMovie(
-          id: maps[i]['id'],
-          page: maps[i]['page'],
-          totalResults: maps[i]['totalResults'],
-          totalPages: maps[i]["totalPages"],
-          results: movieResultsFromJson(maps[i]["movieResults"]));
-    });
+  Future<List<MovieModel>> getAllNowPlaying() async {
+    return await _getCachedMovies(nowPlaying);
+  }
+
+  Future<List<MovieModel>> getAllPopularMovies() async {
+    return await _getCachedMovies(popularMovies);
   }
 }
