@@ -1,131 +1,67 @@
-import 'package:dartz/dartz.dart';
-import 'package:data/contract/cache/movie_cache.dart';
-import 'package:data/contract/remote/movie_remote.dart';
-import 'package:data/mapper/movie_entity_mapper.dart';
-import 'package:data/model/movie_entity.dart';
-import 'package:domain/exception/failure.dart';
-import 'package:domain/model/movie.dart';
-import 'package:domain/repository/movie_repository.dart';
-import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
+import 'package:data/sources/movie/local_movie_cache_datasource.dart';
+import 'package:data/sources/movie/movie_remote_datasource.dart';
+import 'package:domain/domain_dependencies.dart';
+import 'package:domain/utils/maybe_result.dart';
 
 class MovieRepositoryImpl implements MovieRepository {
-  final MovieRemote movieRemote;
-  final MovieCache movieCache;
-  final MovieEntityMapper movieMapper;
+  final LocalMovieCacheDataSource movieCacheDatasource;
+  final MovieRemoteDatasource remoteDatasource;
 
-  MovieRepositoryImpl({
-    @required this.movieRemote,
-    @required this.movieCache,
-    @required this.movieMapper,
-  });
+  MovieRepositoryImpl({required this.movieCacheDatasource, required this.remoteDatasource});
 
   @override
-  Future<Either<Failure, List<Movie>>> getAllMovieCategories() async {
+  Future<MaybeResult<MovieCategoryEntity>> fetchMovieCategories() async {
     try {
-      final movie = await movieRemote.fetchMovieCategories();
-      await movieCache.saveMovie(movie);
+      final cachedMovies = movieCacheDatasource.fetchMovieCategory();
+      if (cachedMovies.results.isNotEmpty) return MaybeResult.success(cachedMovies);
 
-      final cachedMovies =
-          movieMapper.mapFromEntityList(await movieCache.getCachedMovies());
+      final movies = await remoteDatasource.fetchMovieCategories();
+      movieCacheDatasource.insert(movies);
 
-      return Right(cachedMovies);
-    } catch (e) {
-      final movies = await retrieveCachedMovieCategories();
-      if (movies != null || movies.isNotEmpty) return Right(movies);
-      return Left(ServerFailure(errorMessage: e.toString()));
+      return MaybeResult.success(movies);
+    } catch (exception, stackTrace) {
+      return MaybeResult.failure(AppException(exception.toString(), stackTrace));
     }
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getAllNowPlayingMovies({
-    bool loadMore = false,
-    int page = 1,
-  }) async {
+  Future<MaybeResult<NowPlayingMovieEntity>> fetchNowPlayingMovies({int page = 1}) async {
     try {
-      if (loadMore) {
-        final movies = await loadMoreNowPlayingMovies();
-        return Right(movieMapper.mapFromEntityList(movies));
-      }
+      final cachedMovies = movieCacheDatasource.fetchNowPlayingMovies();
+      if (cachedMovies.results.isNotEmpty && page <= 1) return MaybeResult.success(cachedMovies);
 
-      final movies = await getNowPlayingMovies(page);
-      await movieCache.saveNowPlaying(movies);
-      final savedMovie = await movieCache.getCachedNowPlaying();
-      return Right(movieMapper.mapFromEntityList(savedMovie));
-    } catch (e) {
-      final movies = await retrieveCachedNowPlayingMovies();
-      if (movies != null || movies.isNotEmpty) return Right(movies);
-      return Left(ServerFailure(errorMessage: e.toString()));
+      final movies = await remoteDatasource.fetchNowPlayingMovies(page: page);
+      movieCacheDatasource.insert(movies);
+
+      return MaybeResult.success(movies);
+    } catch (exception, stackTrace) {
+      return MaybeResult.failure(AppException(exception.toString(), stackTrace));
     }
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getAllPopularMovies(
-      {bool loadMore = false}) async {
+  Future<MaybeResult<PopularMovieEntity>> fetchPopularMovies({int page = 1}) async {
     try {
-      final movie = await movieRemote.fetchPopularMovies();
-      await movieCache.savePopularMovies(movie);
-      final savedMovie = await movieCache.getCachedPopularMovies();
-      return Right(movieMapper.mapFromEntityList(savedMovie));
-    } catch (e) {
-      final movies = await retrieveCachedPopularMovies();
-      if (movies != null || movies.isNotEmpty) return Right(movies);
-      return Left(ServerFailure(errorMessage: e.toString()));
+      final cachedMovies = movieCacheDatasource.fetchPopularMovies();
+      if (cachedMovies.results.isNotEmpty && page <= 1) return MaybeResult.success(cachedMovies);
+
+      final movies = await remoteDatasource.fetchPopularMovies(page: page);
+      movieCacheDatasource.insert(movies);
+
+      return MaybeResult.success(movies);
+    } catch (exception, stackTrace) {
+      return MaybeResult.failure(AppException(exception.toString(), stackTrace));
     }
   }
 
   @override
-  Future<Either<Failure, Movie>> searchMovie(
-    int page,
-    String query, {
-    bool loadMore = false,
-  }) async {
+  Future<MaybeResult<List<MovieInfoEntity>>> searchMovie(int page, String query) async {
     try {
-      final searchedMovie = await movieRemote.searchForMovie(query, page);
-      if (searchedMovie != null || searchedMovie.results.isNotEmpty) {
-        return Right(movieMapper.mapFromEntity(searchedMovie));
-      } else
-        return Left(
-            ServerFailure(errorMessage: "Movie with that name not found"));
-    } catch (e) {
-      print(e.toString());
-      return Left(ServerFailure(errorMessage: e.toString()));
+      final movies = await remoteDatasource.searchForMovie(query, page);
+
+      return MaybeResult.success(movies);
+    } catch (exception, stackTrace) {
+      return MaybeResult.failure(AppException(exception.toString(), stackTrace));
     }
-  }
-
-  Future<MovieEntity> getNowPlayingMovies(int page) {
-    return movieRemote.fetchNowPlayingMovies(page: page);
-  }
-
-  Future<List<MovieEntity>> loadMoreNowPlayingMovies() async {
-    final savedMovies = await movieCache.getCachedNowPlaying();
-    final cachedNowPlaying = savedMovies.first;
-
-    int currentPage = cachedNowPlaying.page;
-
-    final newMovie = cachedNowPlaying.copyWith(page: currentPage += 1);
-
-    final movieResponse = await getNowPlayingMovies(newMovie.page);
-
-    newMovie.results.addAll(movieResponse.results);
-
-    await movieCache.updateNowPlaying(newMovie);
-
-    return movieCache.getCachedNowPlaying();
-  }
-
-  Future<List<Movie>> retrieveCachedMovieCategories() async {
-    final movies = await movieCache.getCachedMovies();
-    return movieMapper.mapFromEntityList(movies);
-  }
-
-  Future<List<Movie>> retrieveCachedPopularMovies() async {
-    final movies = await movieCache.getCachedPopularMovies();
-    return movieMapper.mapFromEntityList(movies);
-  }
-
-  Future<List<Movie>> retrieveCachedNowPlayingMovies() async {
-    final movies = await movieCache.getCachedNowPlaying();
-    return movieMapper.mapFromEntityList(movies);
   }
 }

@@ -15,7 +15,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=3.7.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -27,16 +27,11 @@ dependencies:
   transparent_image: ^2.0.0
   sqflite:
   path_provider:
-  flutter_bloc: ^7.0.0
+  flutter_bloc: ^9.1.1
   equatable: ^2.0.0
-  # Functional programming thingies
-  dartz: ^0.9.2
   # Service locator
-  get_it: ^3.1.0
-  data_connection_checker: ^0.3.4
-
-  cache:
-    path: ./cache
+  get_it: ^8.0.3
+  shared_preferences: ^2.5.3
 
   data:
     path: ./data

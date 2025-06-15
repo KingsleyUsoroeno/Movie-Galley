@@ -1,94 +1,43 @@
-import 'package:cache/cacheimpl/movie_cache_impl.dart';
-import 'package:cache/db/db_helper.dart';
-import 'package:cache/mapper/cache_movie_mapper.dart';
-import 'package:data/contract/cache/movie_cache.dart';
-import 'package:data/contract/remote/movie_remote.dart';
-import 'package:data/mapper/movie_entity_mapper.dart';
 import 'package:data/repository/movie_repository_impl.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:domain/repository/movie_repository.dart';
-import 'package:domain/usecase/movies/fetch_movie.dart';
-import 'package:domain/usecase/movies/fetch_now_playing.dart';
-import 'package:domain/usecase/movies/fetch_popular_movies.dart';
-import 'package:domain/usecase/movies/search_movie.dart';
+import 'package:data/sources/movie/local_movie_cache_datasource.dart';
+import 'package:domain/domain_dependencies.dart';
+import 'package:domain/movie/use_case/search_movie_use_case.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'package:movies/core/bloc/movie_category/bloc.dart';
-import 'package:movies/core/bloc/popular_movie/popular_movie_bloc.dart';
-import 'package:movies/utils/network_info.dart';
-import 'package:remote/mapper/movie_remote_mapper.dart';
-import 'package:remote/remote/movie_remote_impl.dart';
-
-import '../core/bloc/movie_category/movie_bloc.dart';
-import '../core/bloc/now_playing/now_playing_movie_bloc.dart';
-import '../core/bloc/search_result_bloc/movie_search_bloc.dart';
+import 'package:movies/movies/movie_categories/cubit/movie_category_cubit.dart';
+import 'package:movies/movies/movie_search/cubit/movie_search_cubit.dart';
+import 'package:movies/movies/now_playing_movies/cubit/now_playing_movies_cubit.dart';
+import 'package:movies/movies/popular_movies/cubit/popular_movies_cubit.dart';
+import 'package:remote/sources/movies/movie_remote_datasource_impl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final injector = GetIt.instance;
 
 Future<void> init() async {
+  final sharedPref = await SharedPreferences.getInstance();
+
+  injector.registerFactory(() => FetchNowPlayingMovieUseCase(movieRepository: injector.get()));
+
+  injector.registerFactory(() => FetchMovieCategoriesUseCase(movieRepository: injector.get()));
+
+  injector.registerFactory(() => SearchMovieUseCase(movieRepository: injector.get()));
+
+  injector.registerFactory(() => FetchPopularMoviesUseCase(movieRepository: injector.get()));
+
   //! Features - MovieBloc Bloc
-  injector.registerFactory(() => MovieBloc(fetchMovie: injector.get()));
+  injector.registerFactory(() => MovieCategoryCubit(fetchMovieCategoriesUseCase: injector.get()));
 
-  injector.registerFactory(
-      () => NowPlayingMovieBloc(fetchNowPlaying: injector.get()));
+  injector.registerFactory(() => NowPlayingMoviesCubit(fetchNowPlayingMovieUseCase: injector.get()));
 
-  injector.registerFactory(
-    () => MovieSearchBloc(
-      searchMovie: injector.get(),
-    ),
-  );
+  injector.registerFactory(() => MovieSearchCubit(searchMovieUseCase: injector.get()));
 
-  injector.registerFactory(
-    () => PopularMovieBloc(
-      fetchPopularMovie: injector.get(),
-    ),
-  );
+  injector.registerFactory(() => PopularMoviesCubit(fetchNowPlayingMovieUseCase: injector.get()));
 
   // Repository
   injector.registerLazySingleton<MovieRepository>(
-        () => MovieRepositoryImpl(
-      movieRemote: injector.get(),
-      movieCache: injector.get(),
-      movieMapper: MovieEntityMapper(),
+    () => MovieRepositoryImpl(
+      movieCacheDatasource: LocalMovieCacheDataSource(sharedPref),
+      remoteDatasource: MovieRemoteDatasourceImpl(httpClient: http.Client()),
     ),
   );
-
-  injector.registerLazySingleton<MovieCache>(
-        () => MovieCacheImpl(
-      databaseHelper: injector.get(),
-      cacheMovieMapper: CacheMovieMapper(),
-    ),
-  );
-
-  // injecting our MovieRemote
-  injector.registerLazySingleton<MovieRemote>(
-    () => MovieRemoteImpl(
-      httpClient: http.Client(),
-      movieRemoteMapper: MovieRemoteMapper(),
-    ),
-  );
-
-  injector.registerLazySingleton(() => DatabaseHelper.db);
-
-  injector.registerFactory(
-    () => FetchNowPlaying(movieRepository: injector.get()),
-  );
-
-  injector.registerFactory(
-    () => FetchMovie(movieRepository: injector.get()),
-  );
-
-  injector.registerFactory(
-    () => SearchMovie(movieRepository: injector.get()),
-  );
-
-  injector.registerFactory(
-    () => FetchPopularMovie(movieRepository: injector.get()),
-  );
-
-  injector.registerLazySingleton<NetworkInfo>(
-    () => NetworkInfoImpl(injector()),
-  );
-
-  injector.registerLazySingleton(() => DataConnectionChecker());
 }
