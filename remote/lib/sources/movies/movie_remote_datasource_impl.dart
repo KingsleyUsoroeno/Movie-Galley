@@ -24,6 +24,7 @@ class MovieRemoteDatasourceImpl implements MovieRemoteDatasource {
         RemoteConstants.BASE_URL +
         "3/movie/now_playing?api_key=${RemoteConstants.API_KEY}"
             "&language=en-US&page=$page";
+    print('url $url');
     return NowPlayingMovieEntity(results: await httpClient.fetchMovie(url));
   }
 

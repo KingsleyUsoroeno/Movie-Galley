@@ -1,4 +1,4 @@
-import 'package:data/repository/movie_repository_impl.dart';
+import 'package:data/repository/movie/movie_repository_impl.dart';
 import 'package:data/sources/movie/local_movie_cache_datasource.dart';
 import 'package:domain/domain_dependencies.dart';
 import 'package:domain/movie/use_case/search_movie_use_case.dart';
